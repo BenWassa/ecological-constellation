@@ -183,9 +183,10 @@ type SliderProps = {
   value: number;
   onChange: (trait: TraitKey, value: number) => void;
   desc: string;
+  onTabPress?: (direction: 'forward' | 'backward') => void;
 };
 
-const Slider = ({ trait, value, onChange, desc }: SliderProps) => {
+const Slider = ({ trait, value, onChange, desc, onTabPress }: SliderProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value.toString());
 
@@ -211,6 +212,14 @@ const Slider = ({ trait, value, onChange, desc }: SliderProps) => {
       handleInputBlur();
     } else if (e.key === 'Escape') {
       setIsEditing(false);
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const numValue = parseInt(inputValue);
+      if (!isNaN(numValue)) {
+        onChange(trait, Math.min(120, Math.max(0, numValue)));
+      }
+      setIsEditing(false);
+      onTabPress?.(e.shiftKey ? 'backward' : 'forward');
     }
   };
 
@@ -239,6 +248,7 @@ const Slider = ({ trait, value, onChange, desc }: SliderProps) => {
           />
         ) : (
           <span
+            data-trait={trait}
             onClick={handleNumberClick}
             className="text-2xl serif text-indigo-100 w-12 text-right cursor-pointer hover:text-indigo-300 hover:underline transition-colors"
             title="Click to edit"
@@ -308,6 +318,25 @@ export default function AnimalConstellationApp() {
   const handleTraitChange = (trait: TraitKey, value: number) => {
     const nextValue = Math.min(120, Math.max(0, value));
     setTraits((prev) => ({ ...prev, [trait]: nextValue }));
+  };
+
+  const handleTabPress = (currentTrait: TraitKey, direction: 'forward' | 'backward') => {
+    const traitKeys: TraitKey[] = ['N', 'E', 'O', 'A', 'C'];
+    const currentIndex = traitKeys.indexOf(currentTrait);
+    let nextIndex: number;
+
+    if (direction === 'forward') {
+      nextIndex = (currentIndex + 1) % traitKeys.length;
+    } else {
+      nextIndex = (currentIndex - 1 + traitKeys.length) % traitKeys.length;
+    }
+
+    const nextTrait = traitKeys[nextIndex];
+    // Small delay to ensure the previous input has closed
+    setTimeout(() => {
+      const nextSpan = document.querySelector(`[data-trait="${nextTrait}"]`) as HTMLElement;
+      nextSpan?.click();
+    }, 10);
   };
 
   const handleCalculate = () => {
@@ -437,6 +466,7 @@ export default function AnimalConstellationApp() {
                   value={traits[trait]}
                   onChange={handleTraitChange}
                   desc={getDesc(trait, traits[trait])}
+                  onTabPress={(direction) => handleTabPress(trait, direction)}
                 />
               ))}
             </div>
