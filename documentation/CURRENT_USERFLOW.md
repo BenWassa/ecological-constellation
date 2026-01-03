@@ -1,20 +1,20 @@
-Current User Flow (as implemented)
+Current User Flow (Streamlined - January 2026)
 
 Scope
-This document describes the current runtime flow and UI states implemented in `src/SpiritAnimal.tsx`.
-It is a technical description of what exists now (not the intended canonical flow).
+This document describes the streamlined runtime flow and UI states implemented in `src/SpiritAnimal.tsx`.
+This is the canonical simplified flow optimized for minimal user friction.
 
 High-level state machine
 
 - Single-page app with in-memory view state.
-- View states: `intro` -> `method-select` -> `assessment` or `manual-entry` -> `processing` -> `results`.
-- Additional view: `external-test-info` (external test handoff).
+- **Streamlined flow**: `intro` -> `assessment` -> `processing` -> `results`.
+- The intro screen now includes direct "Begin Test" CTA to skip method selection.
 - Navigation is controlled by local React state, not routing.
 
 Entry point
 
 - App mounts `SpiritAnimal` via `src/App.tsx` and `src/main.tsx`.
-- Initial state: `view = 'intro'`.
+- Initial state: `view = 'intro'` with direct path to assessment.
 
 Global UI elements
 
@@ -28,25 +28,22 @@ Global UI elements
 
 View: Intro (`view === 'intro'`)
 
-- Purpose: landing/hero.
+- Purpose: landing/hero with direct test access.
 - Content:
   - Title: "Discover Your Ecological Constellation".
   - Description of Big Five translation to ecological strategies.
-- Primary CTA: "Begin Mapping".
+- **Primary CTA: "Begin Test"** (previously "Begin Mapping").
 - Action:
-  - Clicking "Begin Mapping" sets `view = 'method-select'`.
+  - Clicking "Begin Test" directly sets `view = 'assessment'` (skips method-select).
+  - Users can access advanced options (manual entry, external test) via secondary UI if needed.
 
-View: Method Select (`view === 'method-select'`)
-
-- Purpose: choose estimation vs. external test vs. manual entry.
-- Options:
-  - "Estimate my traits (quick)" -> `view = 'assessment'`.
-  - "I already have Big Five results" -> `view = 'manual-entry'`.
-  - "Take a full Big Five test" -> `view = 'external-test-info'`.
+**REMOVED VIEW: Method Select** 
+- The `method-select` view is no longer part of the primary flow.
+- Users go directly from intro to the slider-based assessment for optimal UX.
 
 View: Assessment (`view === 'assessment'`)
 
-- Purpose: slider-based trait input.
+- Purpose: **PRIMARY INPUT METHOD** - slider-based trait input.
 - UI structure:
   - Header: "Trait Input" with subtext.
   - Sliders for 5 traits: E, A, C, O, N.
@@ -59,10 +56,13 @@ View: Assessment (`view === 'assessment'`)
 - Behavior:
   - Slider change updates local `traits` state.
 - CTA: "Reveal Constellation" triggers `handleCalculate()`.
+- **This is the default and recommended entry point for all users.**
+
+**OPTIONAL VIEWS** (for advanced users):
 
 View: External Test Info (`view === 'external-test-info'`)
 
-- Purpose: explain external test and data ownership.
+- Purpose: explain external test and data ownership (advanced option only).
 - Content includes:
   - "This site does not administer personality tests."
   - "You will receive numeric scores for O C E A N."
@@ -71,14 +71,16 @@ View: External Test Info (`view === 'external-test-info'`)
   - "Go to Big Five Test" opens `https://bigfive-test.com` in a new tab.
   - "I already have my results" sets `view = 'manual-entry'`.
   - "Back to method selection" sets `view = 'method-select'`.
+- **Note**: This view is accessible via secondary navigation only, not part of primary flow.
 
 View: Manual Entry (`view === 'manual-entry'`)
 
-- Purpose: numeric Big Five input.
+- Purpose: numeric Big Five input (advanced option only).
 - Inputs:
   - Number fields for O, C, E, A, N (0-100).
   - Optional "Test ID (for your reference)".
 - CTA: "Reveal Constellation" triggers `handleCalculate()`.
+- **Note**: This view is accessible via secondary navigation only, not part of primary flow.
 
 View: Processing (`view === 'processing'`)
 

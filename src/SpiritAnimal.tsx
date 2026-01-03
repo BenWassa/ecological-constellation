@@ -338,13 +338,14 @@ export default function AnimalConstellationApp() {
               </span>
             </h1>
             <p className="text-lg text-slate-200 mb-12 font-light leading-relaxed">
-              Beyond simple labels. This system translates your Big Five
-              personality traits into a weighted constellation of ecological
-              strategies. Are you a pack-oriented coordinator, a solitary
-              specialist, or an adaptable generalist?
+              Beyond simple labels. This system translates your Big Five personality traits{' '}
+              into a weighted constellation of ecological strategies.
+              <br />
+              Are you a pack-oriented coordinator, a solitary specialist,{' '}
+              or an adaptable generalist?
             </p>
             <button
-              onClick={() => setView('method-select')}
+              onClick={() => setView('assessment')}
               className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white transition-all duration-200 bg-indigo-900/50 border border-indigo-500/30 rounded-full hover:bg-indigo-800/50 hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             >
               <span className="mr-2">Begin Mapping</span>
@@ -353,6 +354,15 @@ export default function AnimalConstellationApp() {
                 className="group-hover:translate-x-1 transition-transform"
               />
             </button>
+            <p className="text-sm text-slate-400 mt-6">
+              Want a full assessment first?{' '}
+              <button
+                onClick={() => setView('external-test-info')}
+                className="text-indigo-300 hover:text-indigo-200 underline underline-offset-2 transition-colors"
+              >
+                Take the Big Five test
+              </button>
+            </p>
           </div>
         )}
 

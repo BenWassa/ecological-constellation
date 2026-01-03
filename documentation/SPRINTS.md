@@ -144,3 +144,130 @@ Success Criteria (Product-Level)
 	•	App remains lightweight and stable
 
 ⸻
+
+---
+
+Sprint — Streamlined User Flow (v2) — January 2026
+
+Sprint Goal
+Reduce user friction and eliminate unnecessary navigation steps by:
+	•	Making slider-based trait estimation the default and primary entry point
+	•	Removing the method selection screen from the main flow
+	•	Providing direct "Begin Test" access from the home page
+	•	Moving advanced options (manual entry, external test) to secondary navigation
+
+⸻
+
+Problem Statement
+The previous sprint introduced a method-select screen that added an extra click between the landing page and the actual assessment. User testing and analysis revealed:
+	•	The slider-based estimation is the best UI for input
+	•	Most users don't need to choose between multiple methods upfront
+	•	The extra navigation step creates unnecessary friction
+	•	Users want immediate access to the test from the home page
+
+⸻
+
+Scope (In)
+	•	Direct routing from intro to assessment (slider view)
+	•	Updated CTA language: "Begin Test" instead of "Begin Mapping"
+	•	Slider assessment becomes the canonical primary path
+	•	Advanced options remain available but not in primary flow
+	•	Updated documentation reflecting streamlined flow
+
+⸻
+
+Scope (Out)
+	•	Removing manual entry or external test features (kept as advanced options)
+	•	Backend changes
+	•	New features beyond flow simplification
+
+⸻
+
+Sprint Tasks
+
+Task 1: Remove Method Selection from Primary Flow
+
+Update navigation logic:
+	•	Intro "Begin Test" button now routes directly to `view = 'assessment'`
+	•	Remove `view = 'method-select'` from primary user journey
+	•	Keep method-select view in codebase for potential secondary access
+
+Acceptance:
+	•	User clicks "Begin Test" on home page → goes directly to sliders
+	•	No intermediate selection screen in primary flow
+	•	Flow is: intro → assessment → processing → results
+
+⸻
+
+Task 2: Update Home Page CTA
+
+Content changes:
+	•	Change button text from "Begin Mapping" to "Begin Test"
+	•	Ensure messaging emphasizes immediate access to assessment
+	•	Maintain existing intro copy describing the constellation concept
+
+Acceptance:
+	•	CTA clearly signals direct access to the test
+	•	User expectations aligned with actual behavior
+
+⸻
+
+Task 3: Reposition Advanced Options
+
+Implementation:
+	•	Manual entry and external test options remain functional
+	•	Access via secondary navigation (e.g., footer link, settings menu, or "Advanced Options" link)
+	•	Not presented as equals to slider estimation in primary flow
+
+Acceptance:
+	•	Power users can still access manual entry and external test
+	•	These options don't clutter the main user journey
+	•	Clear signaling that sliders are the recommended method
+
+⸻
+
+Task 4: Update Documentation
+
+Files to update:
+	•	`CURRENT_USERFLOW.md`: Reflect new streamlined flow
+	•	`SPRINTS.md`: Add this sprint documentation
+	•	Update flow diagrams if they exist
+
+Content requirements:
+	•	Document removal of method-select from primary flow
+	•	Mark assessment view as "PRIMARY INPUT METHOD"
+	•	Clearly indicate manual-entry and external-test-info as "OPTIONAL/ADVANCED"
+
+Acceptance:
+	•	Documentation accurately reflects implemented flow
+	•	Future developers understand the simplified UX intent
+
+⸻
+
+Definition of Done
+	•	Home page "Begin Test" button routes directly to slider assessment
+	•	Method selection screen removed from primary user journey
+	•	Advanced options (manual entry, external test) remain accessible via secondary navigation
+	•	Documentation updated to reflect streamlined flow
+	•	No regressions in existing functionality
+
+⸻
+
+Success Criteria (Product-Level)
+	•	Reduced friction: users access test in fewer clicks
+	•	Higher engagement with slider-based assessment
+	•	Clearer user mental model: "this is a personality test with ecological interpretation"
+	•	Maintained flexibility for advanced users who have external results
+
+⸻
+
+Rationale
+The slider-based trait estimation provides:
+	•	Immediate engagement (no choice paralysis)
+	•	Best UI/UX for exploration and adjustment
+	•	Clear visual feedback as users interact
+	•	Lowest barrier to entry for new users
+
+By making it the default path, we optimize for 90% of users while keeping power-user options available for the 10% who need them.
+
+⸻
