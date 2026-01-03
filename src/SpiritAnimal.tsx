@@ -240,23 +240,12 @@ const calculateResults = (traits: Record<TraitKey, number>) => {
 export default function AnimalConstellationApp() {
   const [view, setView] = useState<
     | 'intro'
-    | 'method-select'
     | 'assessment'
     | 'external-test-info'
     | 'manual-entry'
     | 'processing'
     | 'results'
   >('intro');
-  const [inputMethod, setInputMethod] = useState<'estimate' | 'manual' | null>(
-    null,
-  );
-  const [traits, setTraits] = useState<Record<TraitKey, number>>({
-    E: 50,
-    A: 50,
-    C: 50,
-    O: 50,
-    N: 50,
-  });
   const [testId, setTestId] = useState('');
   const [results, setResults] = useState<(Animal & { score: number })[]>([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -337,13 +326,11 @@ export default function AnimalConstellationApp() {
                 Ecological Constellation
               </span>
             </h1>
-            <p className="text-lg text-slate-200 mb-12 font-light leading-relaxed">
-              Beyond simple labels. This system translates your Big Five personality traits{' '}
-              into a weighted constellation of ecological strategies.
-              <br />
-              Are you a pack-oriented coordinator, a solitary specialist,{' '}
-              or an adaptable generalist?
+            <p className="text-lg text-slate-200 mb-6 font-light leading-relaxed">
+              This system translates your Big Five personality traits into a
+              weighted constellation of ecological strategies.
             </p>
+            {/* Archetype teaser removed per UX simplification */}
             <button
               onClick={() => setView('assessment')}
               className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white transition-all duration-200 bg-indigo-900/50 border border-indigo-500/30 rounded-full hover:bg-indigo-800/50 hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]"
@@ -356,71 +343,18 @@ export default function AnimalConstellationApp() {
             </button>
             <p className="text-sm text-slate-400 mt-6">
               Want a full assessment first?{' '}
-              <button
-                onClick={() => setView('external-test-info')}
-                className="text-indigo-300 hover:text-indigo-200 underline underline-offset-2 transition-colors"
+              <a
+                href="https://bigfive-test.com"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-indigo-300 hover:text-indigo-200 underline-offset-2 transition-colors"
               >
-                Take the Big Five test
-              </button>
+                <span className="underline">
+                  Take the Big Five test
+                  <Icon name="open_in_new" className="text-xs" />
+                </span>
+              </a>
             </p>
-          </div>
-        )}
-
-        {view === 'method-select' && (
-          <div className="w-full animate-fade-in">
-            <div className="text-center mb-10">
-              <h2 className="serif text-3xl text-white mb-2">
-                Choose Your Input Method
-              </h2>
-              <p className="text-slate-300 text-sm">
-                Start with a quick estimate or bring your existing Big Five
-                scores.
-              </p>
-            </div>
-            <div className="grid gap-4">
-              {[
-                {
-                  title: 'Estimate my traits (quick)',
-                  desc: 'Adjust sliders to approximate your tendencies.',
-                  action: () => {
-                    setInputMethod('estimate');
-                    setView('assessment');
-                  },
-                },
-                {
-                  title: 'I already have Big Five results',
-                  desc: 'Enter your numeric O C E A N scores.',
-                  action: () => {
-                    setInputMethod('manual');
-                    setView('manual-entry');
-                  },
-                },
-                {
-                  title: 'Take a full Big Five test',
-                  desc: 'Use a standardized external assessment.',
-                  action: () => setView('external-test-info'),
-                },
-              ].map((option) => (
-                <button
-                  key={option.title}
-                  onClick={option.action}
-                  className="glass-panel rounded-xl p-6 text-left hover:bg-slate-800/50 transition-colors group"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <h3 className="serif text-2xl text-white mb-2">
-                        {option.title}
-                      </h3>
-                      <p className="text-sm text-slate-300">{option.desc}</p>
-                    </div>
-                    <Icon
-                      name="arrow_forward"
-                      className="text-indigo-200 group-hover:translate-x-1 transition-transform"
-                    />
-                  </div>
-                </button>
-              ))}
-            </div>
           </div>
         )}
 
@@ -494,7 +428,6 @@ export default function AnimalConstellationApp() {
                 </a>
                 <button
                   onClick={() => {
-                    setInputMethod('manual');
                     setView('manual-entry');
                   }}
                   className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all"
@@ -503,10 +436,10 @@ export default function AnimalConstellationApp() {
                 </button>
               </div>
               <button
-                onClick={() => setView('method-select')}
+                onClick={() => setView('intro')}
                 className="text-xs text-slate-400 hover:text-slate-200 uppercase tracking-widest"
               >
-                Back to method selection
+                Back to home
               </button>
             </div>
           </div>
@@ -709,15 +642,7 @@ export default function AnimalConstellationApp() {
               ))}
             </div>
 
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() =>
-                  setView(inputMethod === 'manual' ? 'manual-entry' : 'assessment')
-                }
-                className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all"
-              >
-                Refine Traits
-              </button>
+            <div className="flex justify-center">
               <button
                 onClick={() => window.print()}
                 className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all flex items-center gap-2"
@@ -754,12 +679,15 @@ export default function AnimalConstellationApp() {
                 </p>
                 <p>
                   Big Five results are measurements. This app is an{' '}
-                  <span className="text-indigo-100">interpretive framework</span>{' '}
+                  <span className="text-indigo-100">
+                    interpretive framework
+                  </span>{' '}
                   that translates those measurements into contextual strategies.
                 </p>
                 <p>
-                  The map is <span className="text-indigo-100">non-diagnostic</span>{' '}
-                  and designed to support exploration, not clinical assessment.
+                  The map is{' '}
+                  <span className="text-indigo-100">non-diagnostic</span> and
+                  designed to support exploration, not clinical assessment.
                 </p>
                 <p>
                   Prefer a standardized assessment? Take the full Big Five test
