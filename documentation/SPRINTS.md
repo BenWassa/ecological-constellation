@@ -1,233 +1,146 @@
-Sprint 1 — Identity, Persistence, and Recovery
+Sprint — Decoupled Big Five Interpretation (v1)
 
-Theme: From “quiz” to “tool”
-Duration: 1–2 days
-Risk: Low
-Goal: Introduce continuity without changing core flow
+Sprint Goal
+Enable users to use external Big Five results with Ecological Constellation by:
+	•	Clearly directing them to an external test
+	•	Letting them return and interpret results
+	•	Optionally tagging interpretations with a user-held Test ID
 
----
+This sprint explicitly avoids technical integration.
 
-Sprint 1 Goal
-
-Enable users to:
-	-	Preserve results across sessions
-	-	Revisit prior constellations
-	-	Understand that results are not ephemeral
-
-No new measurement paths yet. No external test integration yet.
-
----
+⸻
 
 Scope (In)
-	-	Result ID generation
-	-	Local persistence (localStorage)
-	-	Load saved results
-	-	Explicit save messaging
-	-	Minimal UI additions
+	•	UX copy for external test handoff
+	•	“I already have results” path
+	•	Manual Big Five score entry
+	•	Optional Test ID annotation (user-held)
+	•	Clear scientific positioning
 
----
-
-Scope (Out)
-	-	Big Five test embedding
-	-	Method selection screen
-	-	Numeric score entry
-	-	Backend or accounts
-
----
-
-Tasks
-
-Task 1: Define Result Identity Model
-
-Add a Result object shape:
-	-	resultId (short, human-readable)
-	-	traits snapshot (E A C O N)
-	-	top 3 animals
-	-	timestamp
-
-Acceptance
-	-	Result object is serializable
-	-	Stored and retrievable as JSON
-
----
-
-Task 2: Generate Result ID
-
-Implementation
-	-	Generate on transition to results
-	-	Format example: EC-7F3A9Q
-	-	Deterministic randomness not required yet
-
-Acceptance
-	-	Every results screen shows a Result ID
-	-	ID is stable for that result
-
----
-
-Task 3: Persist to localStorage
-
-Implementation
-	-	Save result automatically on generation
-	-	Store array of results (append-only for now)
-	-	Key example: ecological-constellation:results
-
-Acceptance
-	-	Reloading the page does not lose saved results
-	-	Multiple results can coexist
-
----
-
-Task 4: Display Save & Recovery UI
-
-Results screen additions
-	-	“Your Result ID” display
-	-	Copy button
-	-	Subtext: “Save this ID to revisit later”
-
-Intro screen addition
-	-	Secondary CTA: “Load saved result”
-
-Acceptance
-	-	User can copy ID
-	-	User understands persistence without instructions
-
----
-
-Task 5: Load Saved Result Flow (Minimal)
-
-Implementation
-	-	Simple modal or inline panel
-	-	Show list of saved results (timestamp + primary animal)
-	-	Allow selection → sets view = 'results'
-
-Acceptance
-	-	User can return to previous constellation
-	-	No crashes if storage is empty
-
----
-
-Definition of Done (Sprint 1)
-	-	Results persist across refresh
-	-	Users can recover prior results
-	-	Result ID is visible and copyable
-	-	Existing flow still works end-to-end
-
----
-
-Sprint 2 — User Choice & Measurement Paths
-
-Theme: Respect user intent
-Duration: 2–3 days
-Risk: Medium (UI branching)
-Goal: Add multiple valid paths into the constellation
-
----
-
-Sprint 2 Goal
-
-Allow users to:
-	-	Estimate traits (current behavior)
-	-	Enter known Big Five scores
-	-	Prepare for full test integration
-
-No forced path. No loss of simplicity.
-
----
-
-Scope (In)
-	-	Method Selection screen
-	-	Manual score entry flow
-	-	External test placeholder
-	-	Flow wiring
-
----
+⸻
 
 Scope (Out)
-	-	Automated score ingestion
-	-	Tight iframe-to-state coupling
-	-	Backend storage
+	•	iframe embedding
+	•	Score ingestion or validation
+	•	Backend or accounts
+	•	Test verification
+	•	Automation of any kind
 
----
+⸻
 
-Tasks
+Sprint Tasks
 
 Task 1: Add Method Selection Screen
 
 New view: method-select
 
-Options
-	-	Estimate my traits
-	-	Enter existing Big Five scores
-	-	Take full Big Five test
-	-	Load saved result
+Options (exact wording can be refined later):
+	•	Estimate my traits (quick)
+	•	I already have Big Five results
+	•	Take a full Big Five test
 
 Acceptance
-	-	Intro CTA routes here
-	-	Each option is explicit and readable
+	•	Intro CTA routes here
+	•	Existing “Estimate traits” path remains intact
+	•	User choice is explicit and respected
 
----
+⸻
 
-Task 2: Wire Existing Flow to “Estimate Traits”
+Task 2: External Test Handoff Screen
 
-Implementation
-	-	“Estimate traits” → current assessment view
-	-	No behavioral changes
+New view: external-test-info
+
+Content requirements
+	•	Explain that the test is external and standardized
+	•	Emphasize user responsibility for saving results
+	•	Provide a single clear outbound link
+
+Required copy elements
+	•	“This site does not administer personality tests.”
+	•	“You will receive numeric scores for O C E A N.”
+	•	“Save your Test ID or results page for future use.”
+
+CTA
+	•	“Go to Big Five Test” (opens new tab)
+	•	“I already have my results” (returns to app)
 
 Acceptance
-	-	Zero regression in existing UX
+	•	No iframe
+	•	No data coupling
+	•	Clear user expectations
 
----
+⸻
 
-Task 3: Add “Enter Existing Scores” Flow
+Task 3: Manual Big Five Score Entry
 
 New view: manual-entry
 
-UI
-	-	Numeric inputs or sliders (0–100)
-	-	Labels: O C E A N
-	-	Helper text: “Compatible with IPIP / BigFive-Test outputs”
+Inputs
+	•	Five numeric fields or sliders (0–100)
+	•	Labels: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism
+	•	Optional field: “Test ID (for your reference)”
 
 Behavior
-	-	On submit → same processing + results pipeline
+	•	Validation: numbers only, 0–100
+	•	On submit → existing processing + results pipeline
 
 Acceptance
-	-	User can bypass estimation
-	-	Results match manual input
+	•	User can generate constellation without estimation
+	•	Test ID is optional and user-controlled
 
----
+⸻
 
-Task 4: Add “Take Full Big Five Test” Placeholder
+Task 4: Attach Test ID to Results (Non-Authoritative)
 
-New view: external-test
+Results screen update
+	•	If Test ID provided:
+	•	Display as “Associated Test ID”
+	•	Clarify: “User-supplied reference”
 
-For now
-	-	Clear explanation screen
-	-	Button linking or embedding external test
-	-	“Return to enter scores” CTA
-
-Acceptance
-	-	Flow is visible but optional
-	-	No broken states
-
----
-
-Task 5: Navigation Hardening
-
-Add guardrails
-	-	Confirm before discarding unsaved changes (optional)
-	-	Preserve traits when navigating backward
+Important
+	•	No verification
+	•	No assumptions
+	•	No dependency
 
 Acceptance
-	-	No accidental data loss
-	-	Navigation feels intentional
+	•	ID persists with result locally (if persistence exists)
+	•	App never relies on ID for logic
 
----
+⸻
 
-Definition of Done (Sprint 2)
-	-	Users can choose how to generate their constellation
-	-	Existing users are not forced into testing
-	-	App supports informed users gracefully
-	-	Flow matches the canonical user flow doc
+Task 5: Update Science / About Copy
 
----
+Add clarification
+	•	Distinguish measurement vs interpretation
+	•	State that Ecological Constellation is a meaning layer
 
+Key language
+	•	“Interpretive framework”
+	•	“Non-diagnostic”
+	•	“Contextual strategies”
+
+Acceptance
+	•	No ambiguity about what your app does
+	•	Strong scientific posture
+
+⸻
+
+Definition of Done
+	•	Users can choose to:
+	•	Estimate traits
+	•	Use existing Big Five results
+	•	Take an external test
+	•	External test is linked, not embedded
+	•	Users are explicitly told to save their Test ID
+	•	Manual score entry works end-to-end
+	•	No new technical dependencies introduced
+
+⸻
+
+Success Criteria (Product-Level)
+	•	Users understand the relationship between the test and the constellation
+	•	No confusion about data ownership
+	•	No friction that blocks interpretation
+	•	App remains lightweight and stable
+
+⸻
