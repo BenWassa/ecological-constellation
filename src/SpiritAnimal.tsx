@@ -29,7 +29,7 @@ const animals: Animal[] = [
     name: 'The Wolf',
     tagline: 'Coordinated Cooperation',
     image: wolfImg,
-    traits: { E: 80, A: 75, C: 75, O: 50, N: 50 },
+    traits: { E: 96, A: 90, C: 90, O: 60, N: 60 },
     desc: 'You thrive in structured social groups where clear communication and loyalty are paramount. Like the wolf, you balance individual capability with a deep understanding of hierarchy and cooperation. Your strategy relies on endurance and coordinated effort to achieve goals larger than yourself.',
     keywords: ['Pack Oriented', 'Resilient', 'Communicative'],
   },
@@ -38,7 +38,7 @@ const animals: Animal[] = [
     name: 'The Elephant',
     tagline: 'Matriarchal Wisdom',
     image: elephantImg,
-    traits: { E: 70, A: 85, C: 85, O: 40, N: 30 },
+    traits: { E: 84, A: 120, C: 120, O: 48, N: 36 },
     desc: 'Your strategy is built on long-term memory, emotional depth, and rock-solid reliability. Like the elephant, you act as a stabilizer in your social network, protecting others and maintaining traditions. You are not easily rattled, preferring a calm, deliberate path through life.',
     keywords: ['Protective', 'Stable', 'Empathetic'],
   },
@@ -47,7 +47,7 @@ const animals: Animal[] = [
     name: 'The Octopus',
     tagline: 'Solitary Intelligence',
     image: octopusImg,
-    traits: { E: 20, A: 30, C: 70, O: 90, N: 60 },
+    traits: { E: 24, A: 36, C: 84, O: 108, N: 72 },
     desc: 'Independent, resourceful, and highly adaptive. You do not need a crowd to function; in fact, you perform best when left to your own devices to solve complex problems. Like the octopus, you rely on camouflage, tool use, and rapid adaptation rather than brute force or social signaling.',
     keywords: ['Innovative', 'Independent', 'Problem Solver'],
   },
@@ -56,7 +56,7 @@ const animals: Animal[] = [
     name: 'The Raven',
     tagline: 'Analytical Opportunist',
     image: ravenImg,
-    traits: { E: 60, A: 40, C: 60, O: 95, N: 50 },
+    traits: { E: 72, A: 48, C: 72, O: 114, N: 60 },
     desc: 'Curiosity drives your world. You are a puzzle-solver who watches, learns, and exploits new opportunities. Like the raven, you are playful yet calculating, able to use abstract thinking to navigate complex environments. You are social, but on your own terms.',
     keywords: ['Curious', 'Strategic', 'Playful'],
   },
@@ -65,7 +65,7 @@ const animals: Animal[] = [
     name: 'The Beaver',
     tagline: 'Ecosystem Engineer',
     image: beaverImg,
-    traits: { E: 30, A: 60, C: 95, O: 30, N: 40 },
+    traits: { E: 36, A: 72, C: 114, O: 36, N: 48 },
     desc: 'You are defined by your work and what you build. Industrious and family-oriented, you focus on creating a secure, stable environment. Like the beaver, you have the patience to tackle massive projects step-by-step, reshaping your surroundings to fit your needs.',
     keywords: ['Industrious', 'Home-Builder', 'Diligent'],
   },
@@ -74,7 +74,7 @@ const animals: Animal[] = [
     name: 'The Dolphin',
     tagline: 'Social Innovation',
     image: dolphinImg,
-    traits: { E: 90, A: 80, C: 40, O: 80, N: 60 },
+    traits: { E: 108, A: 96, C: 48, O: 96, N: 72 },
     desc: 'High energy, high social connectivity, and a love for novelty. You use social bonds not just for safety, but for creative play and exploration. Like the dolphin, you are communicative and emotionally attuned, though you may struggle with rigid routines.',
     keywords: ['Sociable', 'Creative', 'Energetic'],
   },
@@ -83,7 +83,7 @@ const animals: Animal[] = [
     name: 'The Capybara',
     tagline: 'Universal Tolerance',
     image: capybaraImg,
-    traits: { E: 60, A: 95, C: 30, O: 30, N: 15 },
+    traits: { E: 72, A: 114, C: 36, O: 36, N: 18 },
     desc: 'The ultimate peacekeeper. Your strategy is radical chill. You diffuse tension simply by being present. Like the capybara, you are comfortable in almost any group, demanding little and offering a calming, non-judgmental presence that draws others to you.',
     keywords: ['Calm', 'Accepting', 'Peaceful'],
   },
@@ -92,7 +92,7 @@ const animals: Animal[] = [
     name: 'The Owl',
     tagline: 'Silent Observer',
     image: owlImg,
-    traits: { E: 20, A: 50, C: 60, O: 60, N: 30 },
+    traits: { E: 24, A: 60, C: 72, O: 72, N: 36 },
     desc: 'You prefer to watch from the periphery before acting. Your strategy is efficiency—why waste energy on noise? Like the owl, you strike with precision when the moment is right, valuing silence, solitude, and acute awareness over social climbing.',
     keywords: ['Observant', 'Precise', 'Efficient'],
   },
@@ -101,7 +101,7 @@ const animals: Animal[] = [
     name: 'The Ant',
     tagline: 'Collective Duty',
     image: antImg,
-    traits: { E: 90, A: 90, C: 90, O: 10, N: 40 },
+    traits: { E: 108, A: 108, C: 108, O: 12, N: 48 },
     desc: 'Selfless, tireless, and hyper-cooperative. You find purpose in serving the greater good of your community. Like the ant, you are never idle, and you understand that the success of the group is the only success that matters. You excel in systems and logistics.',
     keywords: ['Dutiful', 'Selfless', 'Organized'],
   },
@@ -110,7 +110,7 @@ const animals: Animal[] = [
     name: 'The Tiger',
     tagline: 'Solitary Power',
     image: tigerImg,
-    traits: { E: 40, A: 20, C: 80, O: 70, N: 40 },
+    traits: { E: 48, A: 24, C: 96, O: 84, N: 48 },
     desc: 'You are a specialist who controls your own territory. You do not rely on others for your success. Like the tiger, you are fiercely independent, disciplined, and capable of handling high-stakes situations alone. You respect strength and boundaries.',
     keywords: ['Independent', 'Powerful', 'Territorial'],
   },
@@ -203,7 +203,7 @@ const Slider = ({ trait, value, onChange, desc }: SliderProps) => (
     <input
       type="range"
       min="0"
-      max="100"
+      max="120"
       value={value}
       onChange={(e) => onChange(trait, Number(e.target.value))}
       className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
@@ -217,10 +217,10 @@ const Slider = ({ trait, value, onChange, desc }: SliderProps) => (
 
 const getDesc = (trait: TraitKey, val: number) => {
   let idx = 0;
-  if (val >= 80) idx = 4;
-  else if (val >= 60) idx = 3;
-  else if (val >= 40) idx = 2;
-  else if (val >= 20) idx = 1;
+  if (val >= 96) idx = 4;
+  else if (val >= 72) idx = 3;
+  else if (val >= 48) idx = 2;
+  else if (val >= 24) idx = 1;
   return descriptions[trait][idx];
 };
 
@@ -247,18 +247,18 @@ export default function AnimalConstellationApp() {
     | 'results'
   >('intro');
   const [traits, setTraits] = useState<Record<TraitKey, number>>({
-    E: 50,
-    A: 50,
-    C: 50,
-    O: 50,
-    N: 50,
+    E: 60,
+    A: 60,
+    C: 60,
+    O: 60,
+    N: 60,
   });
   const [testId, setTestId] = useState('');
   const [results, setResults] = useState<(Animal & { score: number })[]>([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   const handleTraitChange = (trait: TraitKey, value: number) => {
-    const nextValue = Math.min(100, Math.max(0, value));
+    const nextValue = Math.min(120, Math.max(0, value));
     setTraits((prev) => ({ ...prev, [trait]: nextValue }));
   };
 
