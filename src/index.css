@@ -135,3 +135,117 @@
     transform: translateY(0);
   }
 }
+
+/* Print Styles for Archetype Map */
+@media print {
+  /* Hide interactive elements */
+  button,
+  .fixed,
+  [role="dialog"],
+  .backdrop-blur-sm {
+    display: none !important;
+  }
+
+  /* Ensure body and text are readable on paper */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  /* Make the main content area full width */
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Archetype Map header styling */
+  .serif {
+    color: black !important;
+  }
+
+  /* Primary result styling */
+  .glass-panel {
+    background: white !important;
+    border: 2px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Image styling for print */
+  .result-image {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Secondary results grid - make single column for print */
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Animal cards styling */
+  .animal-card-hover {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Text color adjustments */
+  .text-white {
+    color: black !important;
+  }
+
+  .text-slate-200 {
+    color: #374151 !important;
+  }
+
+  .text-slate-300 {
+    color: #6b7280 !important;
+  }
+
+  .text-indigo-100 {
+    color: #1e40af !important;
+  }
+
+  .text-indigo-200 {
+    color: #3730a3 !important;
+  }
+
+  /* Badge styling */
+  [class*="bg-indigo"] {
+    background: #e0e7ff !important;
+    border-color: #6366f1 !important;
+    color: #1e40af !important;
+  }
+
+  /* Test ID section */
+  .text-slate-400 {
+    color: #9ca3af !important;
+  }
+
+  .text-slate-500 {
+    color: #6b7280 !important;
+  }
+
+  /* Page margins and breaks */
+  @page {
+    margin: 0.75in;
+    size: letter;
+  }
+
+  /* Ensure proper spacing between sections */
+  .mb-8 {
+    margin-bottom: 2rem !important;
+  }
+
+  .mb-12 {
+    margin-bottom: 3rem !important;
+  }
+}
