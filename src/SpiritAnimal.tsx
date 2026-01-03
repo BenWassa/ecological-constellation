@@ -185,35 +185,83 @@ type SliderProps = {
   desc: string;
 };
 
-const Slider = ({ trait, value, onChange, desc }: SliderProps) => (
-  <div className="trait-group group mb-12">
-    <div className="flex justify-between mb-4 items-end">
-      <div>
-        <h3 className="text-lg font-medium text-slate-200">
-          {traitNames[trait]}
-        </h3>
-        <p className="text-sm text-slate-300 min-h-[1.25rem] transition-colors duration-300 group-hover:text-indigo-200">
-          {desc}
-        </p>
+const Slider = ({ trait, value, onChange, desc }: SliderProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(value.toString());
+
+  const handleNumberClick = () => {
+    setIsEditing(true);
+    setInputValue(value.toString());
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    const numValue = parseInt(inputValue);
+    if (!isNaN(numValue)) {
+      onChange(trait, Math.min(120, Math.max(0, numValue)));
+    }
+    setIsEditing(false);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputBlur();
+    } else if (e.key === 'Escape') {
+      setIsEditing(false);
+    }
+  };
+
+  return (
+    <div className="trait-group group mb-12">
+      <div className="flex justify-between mb-4 items-end">
+        <div>
+          <h3 className="text-lg font-medium text-slate-200">
+            {traitNames[trait]}
+          </h3>
+          <p className="text-sm text-slate-300 min-h-[1.25rem] transition-colors duration-300 group-hover:text-indigo-200">
+            {desc}
+          </p>
+        </div>
+        {isEditing ? (
+          <input
+            type="number"
+            min="0"
+            max="120"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            autoFocus
+            className="text-2xl serif text-indigo-100 w-16 text-right bg-slate-800/50 border border-indigo-500/50 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+          />
+        ) : (
+          <span
+            onClick={handleNumberClick}
+            className="text-2xl serif text-indigo-100 w-12 text-right cursor-pointer hover:text-indigo-300 hover:underline transition-colors"
+            title="Click to edit"
+          >
+            {value}
+          </span>
+        )}
       </div>
-      <span className="text-2xl serif text-indigo-100 w-12 text-right">
-        {value}
-      </span>
+      <input
+        type="range"
+        min="0"
+        max="120"
+        value={value}
+        onChange={(e) => onChange(trait, Number(e.target.value))}
+        className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+      />
+      <div className="flex justify-between text-xs text-slate-600 mt-3 uppercase tracking-wider font-medium">
+        <span>{traitRanges[trait][0]}</span>
+        <span>{traitRanges[trait][1]}</span>
+      </div>
     </div>
-    <input
-      type="range"
-      min="0"
-      max="120"
-      value={value}
-      onChange={(e) => onChange(trait, Number(e.target.value))}
-      className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-    />
-    <div className="flex justify-between text-xs text-slate-600 mt-3 uppercase tracking-wider font-medium">
-      <span>{traitRanges[trait][0]}</span>
-      <span>{traitRanges[trait][1]}</span>
-    </div>
-  </div>
-);
+  );
+};
 
 const getDesc = (trait: TraitKey, val: number) => {
   let idx = 0;
@@ -247,11 +295,11 @@ export default function AnimalConstellationApp() {
     | 'results'
   >('intro');
   const [traits, setTraits] = useState<Record<TraitKey, number>>({
+    N: 60,
     E: 60,
+    O: 60,
     A: 60,
     C: 60,
-    O: 60,
-    N: 60,
   });
   const [testId, setTestId] = useState('');
   const [results, setResults] = useState<(Animal & { score: number })[]>([]);
@@ -468,18 +516,18 @@ export default function AnimalConstellationApp() {
                   Format
                 </span>
                 <span className="text-sm text-indigo-200">
-                  O C E A N Scores
+                  N E O A C Scores
                 </span>
               </div>
             </div>
             <div className="grid gap-4">
               {(
                 [
-                  ['O', 'Openness'],
-                  ['C', 'Conscientiousness'],
-                  ['E', 'Extraversion'],
-                  ['A', 'Agreeableness'],
                   ['N', 'Neuroticism'],
+                  ['E', 'Extraversion'],
+                  ['O', 'Openness'],
+                  ['A', 'Agreeableness'],
+                  ['C', 'Conscientiousness'],
                 ] as [TraitKey, string][]
               ).map(([trait, label]) => (
                 <label
@@ -724,17 +772,17 @@ export default function AnimalConstellationApp() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
                   {[
+                    ['Neuroticism', 'Threat Sensitivity & Vigilance'],
                     [
                       'Extraversion',
                       'Social Signaling Density & Reward Seeking',
                     ],
+                    ['Openness', 'Exploratory Adaptation & Plasticity'],
                     ['Agreeableness', 'Conflict Resolution & Cooperation'],
                     [
                       'Conscientiousness',
                       'Future Investment & Delay Tolerance',
                     ],
-                    ['Openness', 'Exploratory Adaptation & Plasticity'],
-                    ['Neuroticism', 'Threat Sensitivity & Vigilance'],
                   ].map(([title, desc]) => (
                     <div key={title} className="bg-slate-800/50 p-4 rounded-lg">
                       <strong className="text-indigo-200 block mb-1">
