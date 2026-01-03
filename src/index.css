@@ -224,6 +224,11 @@
     margin-bottom: 0.4rem !important;
   }
 
+  /* Hide the decorative divider line */
+  .h-px {
+    display: none !important;
+  }
+
   /* Reduce text sizes slightly for fit */
   .text-5xl {
     font-size: 1.75rem !important;
