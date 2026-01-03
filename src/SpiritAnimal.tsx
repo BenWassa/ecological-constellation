@@ -1,359 +1,463 @@
-import React, { useState, useMemo } from 'react';
-import { ChevronRight, RotateCcw, Info, Activity, Shield, Zap, Brain, Heart } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import wolfImg from '../images/Wolf.png';
+import elephantImg from '../images/Elephant.png';
+import octopusImg from '../images/Octopus.png';
+import ravenImg from '../images/Raven.png';
+import beaverImg from '../images/beaver.png';
+import dolphinImg from '../images/Dolphin.png';
+import capybaraImg from '../images/Capybara.png';
+import owlImg from '../images/Owl.png';
+import antImg from '../images/Ant.png';
+import tigerImg from '../images/Tiger.png';
 
-// --- CONFIGURATION & DATA MODELS -------------------------------------------
+type TraitKey = 'E' | 'A' | 'C' | 'O' | 'N';
 
-// 1. Trait Definitions
-const TRAITS = {
-  O: { id: 'O', label: 'Openness', desc: 'Exploratory adaptation and novelty seeking', weight: 1.2 },
-  C: { id: 'C', label: 'Conscientiousness', desc: 'Future investment and delay tolerance', weight: 1.2 },
-  E: { id: 'E', label: 'Extraversion', desc: 'Social signaling density and energy', weight: 1.0 },
-  A: { id: 'A', label: 'Agreeableness', desc: 'Cooperation and conflict resolution', weight: 1.0 },
-  N: { id: 'N', label: 'Neuroticism', desc: 'Threat sensitivity and vigilance', weight: 0.8 },
+type Animal = {
+  id: string;
+  name: string;
+  tagline: string;
+  image: string;
+  traits: Record<TraitKey, number>;
+  desc: string;
+  keywords: string[];
 };
 
-// 2. Band Definitions (Logic Driver)
-const BANDS = {
-  LOW: { label: 'Low', min: 0, max: 35, val: 0 },
-  MODERATE: { label: 'Moderate', min: 36, max: 65, val: 1 },
-  HIGH: { label: 'High', min: 66, max: 85, val: 2 },
-  VERY_HIGH: { label: 'Very High', min: 86, max: 100, val: 3 },
-};
-
-// Helper to determine band from numeric input
-const getBand = (value) => {
-  if (value <= BANDS.LOW.max) return BANDS.LOW;
-  if (value <= BANDS.MODERATE.max) return BANDS.MODERATE;
-  if (value <= BANDS.HIGH.max) return BANDS.HIGH;
-  return BANDS.VERY_HIGH;
-};
-
-// Helper to get numeric value from string trait in Animal Data
-const getBandFromStr = (str) => {
-  const map = { 'low': 0, 'moderate': 1, 'high': 2, 'very_high': 3 };
-  return map[str.toLowerCase()] || 1;
-};
-
-// 3. Animal Data (Extensible JSON Schema)
-const ANIMAL_DATA = [
+const animals: Animal[] = [
   {
     id: 'wolf',
-    name: 'Wolf',
-    traits: { E: 'high', A: 'moderate', C: 'high', O: 'moderate', N: 'moderate' },
-    description: 'Relies on coordinated action and hierarchical purpose.',
-    strengths: ['Strategic cooperation', 'Resilient pursuit', 'Role clarity'],
-    limitations: ['Territorial rigidity', 'Dependent on pack dynamics']
+    name: 'The Wolf',
+    tagline: 'Coordinated Cooperation',
+    image: wolfImg,
+    traits: { E: 80, A: 75, C: 75, O: 50, N: 50 },
+    desc: 'You thrive in structured social groups where clear communication and loyalty are paramount. Like the wolf, you balance individual capability with a deep understanding of hierarchy and cooperation. Your strategy relies on endurance and coordinated effort to achieve goals larger than yourself.',
+    keywords: ['Pack Oriented', 'Resilient', 'Communicative'],
   },
   {
     id: 'elephant',
-    name: 'Elephant',
-    traits: { E: 'high', A: 'very_high', C: 'very_high', O: 'moderate', N: 'low' },
-    description: 'A stabilizer that prioritizes social memory and collective wisdom.',
-    strengths: ['Long-term planning', 'Deep social bonds', 'Environmental stability'],
-    limitations: ['High resource requirements', 'Slow response to rapid change']
+    name: 'The Elephant',
+    tagline: 'Matriarchal Wisdom',
+    image: elephantImg,
+    traits: { E: 70, A: 85, C: 85, O: 40, N: 30 },
+    desc: 'Your strategy is built on long-term memory, emotional depth, and rock-solid reliability. Like the elephant, you act as a stabilizer in your social network, protecting others and maintaining traditions. You are not easily rattled, preferring a calm, deliberate path through life.',
+    keywords: ['Protective', 'Stable', 'Empathetic'],
   },
   {
     id: 'octopus',
-    name: 'Octopus',
-    traits: { E: 'low', A: 'low', C: 'moderate', O: 'very_high', N: 'high' },
-    description: 'A solitary problem-solver thriving on adaptation and stealth.',
-    strengths: ['Independent innovation', 'Camouflage strategies', 'Complex abstraction'],
-    limitations: ['Social isolation', 'High sensitivity to environment']
+    name: 'The Octopus',
+    tagline: 'Solitary Intelligence',
+    image: octopusImg,
+    traits: { E: 20, A: 30, C: 70, O: 90, N: 60 },
+    desc: 'Independent, resourceful, and highly adaptive. You do not need a crowd to function; in fact, you perform best when left to your own devices to solve complex problems. Like the octopus, you rely on camouflage, tool use, and rapid adaptation rather than brute force or social signaling.',
+    keywords: ['Innovative', 'Independent', 'Problem Solver'],
+  },
+  {
+    id: 'raven',
+    name: 'The Raven',
+    tagline: 'Analytical Opportunist',
+    image: ravenImg,
+    traits: { E: 60, A: 40, C: 60, O: 95, N: 50 },
+    desc: 'Curiosity drives your world. You are a puzzle-solver who watches, learns, and exploits new opportunities. Like the raven, you are playful yet calculating, able to use abstract thinking to navigate complex environments. You are social, but on your own terms.',
+    keywords: ['Curious', 'Strategic', 'Playful'],
+  },
+  {
+    id: 'beaver',
+    name: 'The Beaver',
+    tagline: 'Ecosystem Engineer',
+    image: beaverImg,
+    traits: { E: 30, A: 60, C: 95, O: 30, N: 40 },
+    desc: 'You are defined by your work and what you build. Industrious and family-oriented, you focus on creating a secure, stable environment. Like the beaver, you have the patience to tackle massive projects step-by-step, reshaping your surroundings to fit your needs.',
+    keywords: ['Industrious', 'Home-Builder', 'Diligent'],
   },
   {
     id: 'dolphin',
-    name: 'Dolphin',
-    traits: { E: 'very_high', A: 'high', C: 'moderate', O: 'high', N: 'low' },
-    description: 'Navigates through social fluidity and creative communication.',
-    strengths: ['Adaptive communication', 'Creative play', 'Social energy transfer'],
-    limitations: ['Distractible', 'Requires constant stimulation']
+    name: 'The Dolphin',
+    tagline: 'Social Innovation',
+    image: dolphinImg,
+    traits: { E: 90, A: 80, C: 40, O: 80, N: 60 },
+    desc: 'High energy, high social connectivity, and a love for novelty. You use social bonds not just for safety, but for creative play and exploration. Like the dolphin, you are communicative and emotionally attuned, though you may struggle with rigid routines.',
+    keywords: ['Sociable', 'Creative', 'Energetic'],
+  },
+  {
+    id: 'capybara',
+    name: 'The Capybara',
+    tagline: 'Universal Tolerance',
+    image: capybaraImg,
+    traits: { E: 60, A: 95, C: 30, O: 30, N: 15 },
+    desc: 'The ultimate peacekeeper. Your strategy is radical chill. You diffuse tension simply by being present. Like the capybara, you are comfortable in almost any group, demanding little and offering a calming, non-judgmental presence that draws others to you.',
+    keywords: ['Calm', 'Accepting', 'Peaceful'],
   },
   {
     id: 'owl',
-    name: 'Owl',
-    traits: { E: 'low', A: 'moderate', C: 'high', O: 'high', N: 'moderate' },
-    description: 'An efficiency specialist focused on observation and precision.',
-    strengths: ['Energy conservation', 'Strategic timing', 'Independent analysis'],
-    limitations: ['Slow social integration', 'Specialist vulnerability']
+    name: 'The Owl',
+    tagline: 'Silent Observer',
+    image: owlImg,
+    traits: { E: 20, A: 50, C: 60, O: 60, N: 30 },
+    desc: 'You prefer to watch from the periphery before acting. Your strategy is efficiency—why waste energy on noise? Like the owl, you strike with precision when the moment is right, valuing silence, solitude, and acute awareness over social climbing.',
+    keywords: ['Observant', 'Precise', 'Efficient'],
   },
   {
     id: 'ant',
-    name: 'Ant',
-    traits: { E: 'high', A: 'high', C: 'very_high', O: 'low', N: 'moderate' },
-    description: 'Driven by duty, structure, and collective efficiency.',
-    strengths: ['Systematic organization', 'Selflessness', 'Operational scale'],
-    limitations: ['Rigid adaptability', 'Individual agency limited']
+    name: 'The Ant',
+    tagline: 'Collective Duty',
+    image: antImg,
+    traits: { E: 90, A: 90, C: 90, O: 10, N: 40 },
+    desc: 'Selfless, tireless, and hyper-cooperative. You find purpose in serving the greater good of your community. Like the ant, you are never idle, and you understand that the success of the group is the only success that matters. You excel in systems and logistics.',
+    keywords: ['Dutiful', 'Selfless', 'Organized'],
   },
   {
-    id: 'bear',
-    name: 'Bear',
-    traits: { E: 'low', A: 'low', C: 'high', O: 'low', N: 'low' },
-    description: 'A resource-guarding strategist with high autonomy.',
-    strengths: ['Self-reliance', 'Resource defense', 'Steady endurance'],
-    limitations: ['Solitary nature', 'Lower social negotiation skills']
+    id: 'tiger',
+    name: 'The Tiger',
+    tagline: 'Solitary Power',
+    image: tigerImg,
+    traits: { E: 40, A: 20, C: 80, O: 70, N: 40 },
+    desc: 'You are a specialist who controls your own territory. You do not rely on others for your success. Like the tiger, you are fiercely independent, disciplined, and capable of handling high-stakes situations alone. You respect strength and boundaries.',
+    keywords: ['Independent', 'Powerful', 'Territorial'],
   },
-  {
-    id: 'crow',
-    name: 'Crow',
-    traits: { E: 'moderate', A: 'moderate', C: 'moderate', O: 'very_high', N: 'moderate' },
-    description: 'An opportunistic generalist that excels at tool use and learning.',
-    strengths: ['Rapid learning', 'Tool utilization', 'Urban adaptability'],
-    limitations: ['Cautious of novelty', 'Opportunistic reputation']
-  }
 ];
 
-// --- CORE LOGIC MODULE -----------------------------------------------------
-
-const calculateConstellation = (userTraits) => {
-  // 1. Convert User 0-100 to Bands (0-3)
-  const userBands = {};
-  Object.keys(userTraits).forEach(k => {
-    userBands[k] = getBand(userTraits[k]).val;
-  });
-
-  // 2. Score Animals
-  const scored = ANIMAL_DATA.map(animal => {
-    let rawScore = 0;
-    const details = [];
-
-    Object.keys(TRAITS).forEach(traitKey => {
-      const uVal = userBands[traitKey];
-      const aVal = getBandFromStr(animal.traits[traitKey]);
-      const weight = TRAITS[traitKey].weight;
-      
-      const diff = Math.abs(uVal - aVal);
-      let points = 0;
-
-      // Algorithm Rules per Brief Section 6
-      if (diff === 0) points = 3;       // Exact band match
-      else if (diff === 1) points = 1;  // Adjacent band match
-      else points = -2;                 // Opposite/Distant mismatch
-
-      const weightedPoints = points * weight;
-      rawScore += weightedPoints;
-
-      if (points > 0) {
-        details.push({ trait: TRAITS[traitKey].label, score: weightedPoints });
-      }
-    });
-
-    // Sort contributors for the "Alignment Summary"
-    details.sort((a, b) => b.score - a.score);
-
-    return { ...animal, score: rawScore, topMatches: details.slice(0, 2) };
-  });
-
-  // 3. Rank and Return Top 3
-  return scored.sort((a, b) => b.score - a.score).slice(0, 3);
+const descriptions: Record<TraitKey, string[]> = {
+  E: ['Solitary, Reserved', 'Selective, Quiet', 'Balanced Socially', 'Outgoing, Talkative', 'High Density Signaling'],
+  A: ['Competitive, Skeptical', 'Direct, Guarded', 'Negotiator', 'Cooperative, Warm', 'Selfless, Trusting'],
+  C: ['Spontaneous, Improvising', 'Flexible, Casual', 'Organized', 'Diligent, Focused', 'Rigidly Disciplined'],
+  O: ['Pragmatic, Routine', 'Traditional', 'Balanced', 'Curious, Creative', 'Abstract, Experimental'],
+  N: ['Unshakeable, Calm', 'Resilient', 'Responsive', 'Alert, Cautious', 'Hyper-Vigilant'],
 };
 
+const traitNames: Record<TraitKey, string> = {
+  E: 'Social Energy (Extraversion)',
+  A: 'Cooperation Strategy (Agreeableness)',
+  C: 'Investment Focus (Conscientiousness)',
+  O: 'Adaptability (Openness)',
+  N: 'Threat Sensitivity (Neuroticism)',
+};
 
-// --- UI COMPONENTS ---------------------------------------------------------
+const traitRanges: Record<TraitKey, [string, string]> = {
+  E: ['Solitary / Reserved', 'High Density / Signaling'],
+  A: ['Competitive / Direct', 'Harmonizing / Diplomatic'],
+  C: ['Spontaneous / Flexible', 'Planned / Disciplined'],
+  O: ['Routine / Pragmatic', 'Novelty / Abstract'],
+  N: ['Resilient / Stable', 'Reactive / Alert'],
+};
+
+const Icon = ({ name, className = '' }: { name: string; className?: string }) => (
+  <span className={`material-symbols-outlined ${className}`}>{name}</span>
+);
+
+type SliderProps = {
+  trait: TraitKey;
+  value: number;
+  onChange: (trait: TraitKey, value: number) => void;
+  desc: string;
+};
+
+const Slider = ({ trait, value, onChange, desc }: SliderProps) => (
+  <div className="trait-group group mb-12">
+    <div className="flex justify-between mb-4 items-end">
+      <div>
+        <h3 className="text-lg font-medium text-slate-200">{traitNames[trait]}</h3>
+        <p className="text-sm text-slate-500 min-h-[1.25rem] transition-colors duration-300 group-hover:text-indigo-300">
+          {desc}
+        </p>
+      </div>
+      <span className="text-2xl serif text-indigo-200 w-12 text-right">{value}</span>
+    </div>
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value={value}
+      onChange={(e) => onChange(trait, Number(e.target.value))}
+      className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer slider-thumb focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+    />
+    <div className="flex justify-between text-xs text-slate-600 mt-3 uppercase tracking-wider font-medium">
+      <span>{traitRanges[trait][0]}</span>
+      <span>{traitRanges[trait][1]}</span>
+    </div>
+  </div>
+);
+
+const getDesc = (trait: TraitKey, val: number) => {
+  let idx = 0;
+  if (val >= 80) idx = 4;
+  else if (val >= 60) idx = 3;
+  else if (val >= 40) idx = 2;
+  else if (val >= 20) idx = 1;
+  return descriptions[trait][idx];
+};
+
+const calculateResults = (traits: Record<TraitKey, number>) => {
+  const scored = animals.map((animal) => {
+    let diffSq = 0;
+    (Object.keys(traits) as TraitKey[]).forEach((key) => {
+      diffSq += Math.pow(animal.traits[key] - traits[key], 2);
+    });
+    return { ...animal, score: Math.sqrt(diffSq) };
+  });
+
+  scored.sort((a, b) => a.score - b.score);
+  return scored.slice(0, 3);
+};
 
 export default function AnimalConstellationApp() {
-  const [screen, setScreen] = useState('intro'); // intro | traits | results
-  const [inputs, setInputs] = useState({ O: 50, C: 50, E: 50, A: 50, N: 50 });
-  const [results, setResults] = useState([]);
+  const [view, setView] = useState<'intro' | 'assessment' | 'processing' | 'results'>('intro');
+  const [traits, setTraits] = useState<Record<TraitKey, number>>({
+    E: 50,
+    A: 50,
+    C: 50,
+    O: 50,
+    N: 50,
+  });
+  const [results, setResults] = useState<(Animal & { score: number })[]>([]);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
-  const handleAnalyze = () => {
-    const matches = calculateConstellation(inputs);
-    setResults(matches);
-    setScreen('results');
+  const handleTraitChange = (trait: TraitKey, value: number) => {
+    setTraits((prev) => ({ ...prev, [trait]: value }));
   };
 
-  const getTraitIcon = (id) => {
-    switch(id) {
-      case 'O': return <Brain size={18} />;
-      case 'C': return <Shield size={18} />;
-      case 'E': return <Zap size={18} />;
-      case 'A': return <Heart size={18} />;
-      case 'N': return <Activity size={18} />;
-      default: return <Activity size={18} />;
-    }
+  const handleCalculate = () => {
+    setView('processing');
+    window.setTimeout(() => {
+      setResults(calculateResults(traits));
+      setView('results');
+    }, 900);
   };
 
-  // --- SCREENS ---
+  const primaryResult = results[0];
+  const secondaryResults = useMemo(() => results.slice(1), [results]);
 
-  const IntroScreen = () => (
-    <div className="max-w-xl mx-auto text-center pt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="mb-8 flex justify-center">
-        <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center text-slate-100 dark:bg-slate-100 dark:text-slate-900">
-          <Activity size={32} strokeWidth={1.5} />
-        </div>
-      </div>
-      <h1 className="text-4xl font-light text-slate-900 dark:text-slate-100 mb-6 tracking-tight">
-        Animal Constellation Map
-      </h1>
-      <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
-        This system translates your personality traits into a ranked constellation of ecological strategies. 
-        Rather than assigning a single fixed identity, we map how you navigate social energy, risk, and exploration 
-        across different contexts.
-      </p>
-      <button 
-        onClick={() => setScreen('traits')}
-        className="group bg-slate-900 text-white px-8 py-4 rounded-lg font-medium hover:bg-slate-800 transition-all flex items-center gap-2 mx-auto dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
-      >
-        Begin Mapping
-        <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-      </button>
-    </div>
-  );
-
-  const TraitScreen = () => (
-    <div className="max-w-2xl mx-auto pt-4 animate-in fade-in duration-500">
-      <div className="mb-8">
-        <h2 className="text-2xl font-light text-slate-900 dark:text-slate-100 mb-2">Trait Input</h2>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">Adjust sliders to match your typical patterns.</p>
+  return (
+    <div className="relative min-h-screen">
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div
+          className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-900/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDuration: '8s' }}
+        />
+        <div
+          className="absolute bottom-0 right-1/4 w-[520px] h-[520px] bg-slate-800/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDuration: '10s', animationDelay: '1s' }}
+        />
       </div>
 
-      <div className="space-y-8 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 dark:bg-slate-900/60 dark:border-slate-800 dark:shadow-none">
-        {Object.values(TRAITS).map((t) => {
-          const band = getBand(inputs[t.id]);
-          return (
-            <div key={t.id} className="space-y-3">
-              <div className="flex justify-between items-end">
-                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-200 font-medium">
-                  {getTraitIcon(t.id)}
-                  {t.label}
-                </div>
-                <div className="text-right">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-3 dark:text-slate-500">
-                    {band.label}
-                  </span>
-                  <span className="font-mono text-slate-500 dark:text-slate-400 w-8 inline-block text-right">
-                    {inputs[t.id]}
-                  </span>
-                </div>
-              </div>
-              
-              <input 
-                type="range" min="0" max="100" 
-                value={inputs[t.id]}
-                onChange={(e) => setInputs({...inputs, [t.id]: parseInt(e.target.value)})}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-900 dark:accent-slate-100"
-              />
-              
-              <p className="text-xs text-slate-400 dark:text-slate-500 leading-relaxed">
-                {t.desc}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-8 flex justify-center">
-        <button 
-          onClick={handleAnalyze}
-          className="w-full md:w-auto bg-slate-900 text-white px-12 py-4 rounded-lg font-medium hover:bg-slate-800 transition-colors shadow-lg shadow-slate-200 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:shadow-none"
+      <nav className="relative z-10 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto border-b border-white/5">
+        <button
+          type="button"
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => setView('intro')}
         >
-          Generate Constellation
+          <Icon name="hub" className="text-indigo-200" />
+          <span className="serif text-xl tracking-wider text-slate-100">ARCHETYPE MAP</span>
         </button>
-      </div>
-    </div>
-  );
-
-  const ResultsScreen = () => (
-    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <div className="flex justify-between items-start mb-8 border-b border-slate-200 dark:border-slate-800 pb-6">
-        <div>
-          <h2 className="text-3xl font-light text-slate-900 dark:text-slate-100 mb-2">Your Constellation</h2>
-          <p className="text-slate-600 dark:text-slate-300">These strategies align with your trait bands.</p>
-        </div>
-        <button 
-          onClick={() => setScreen('traits')}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 transition-colors dark:text-slate-400 dark:hover:text-slate-200"
-        >
-          <RotateCcw size={16} /> Adjust Traits
-        </button>
-      </div>
-
-      <div className="grid gap-6">
-        {results.map((animal, idx) => (
-          <div 
-            key={animal.id} 
-            className={`
-              relative p-8 rounded-xl border transition-all duration-300
-              ${idx === 0 ? 'bg-slate-50 border-slate-200 shadow-md dark:bg-slate-900/70 dark:border-slate-800 dark:shadow-none' : 'bg-white border-slate-100 hover:border-slate-300 dark:bg-slate-900/50 dark:border-slate-800 dark:hover:border-slate-700'}
-            `}
+        <div className="flex gap-6 items-center">
+          <button
+            className="text-sm text-slate-400 hover:text-white transition-colors"
+            onClick={() => setIsAboutOpen(true)}
           >
-            {/* Rank Badge */}
-            <div className="absolute top-8 left-8 w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 text-slate-400 font-mono text-sm dark:border-slate-700 dark:text-slate-500">
-              0{idx + 1}
+            The Science
+          </button>
+        </div>
+      </nav>
+
+      <main className="relative z-10 max-w-4xl mx-auto px-6 py-12 min-h-[80vh] flex flex-col items-center justify-center">
+        {view === 'intro' && (
+          <div className="text-center max-w-2xl animate-fade-in">
+            <h1 className="serif text-5xl md:text-7xl text-white mb-6 leading-tight">
+              Discover Your <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 to-slate-400">
+                Ecological Constellation
+              </span>
+            </h1>
+            <p className="text-lg text-slate-400 mb-12 font-light leading-relaxed">
+              Beyond simple labels. This system translates your Big Five personality traits into a weighted constellation of
+              ecological strategies. Are you a pack-oriented coordinator, a solitary specialist, or an adaptable generalist?
+            </p>
+            <button
+              onClick={() => setView('assessment')}
+              className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white transition-all duration-200 bg-indigo-900/50 border border-indigo-500/30 rounded-full hover:bg-indigo-800/50 hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+            >
+              <span className="mr-2">Begin Mapping</span>
+              <Icon name="arrow_forward" className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        )}
+
+        {view === 'assessment' && (
+          <div className="w-full animate-fade-in">
+            <div className="w-full flex justify-between items-end mb-12 border-b border-slate-800 pb-4">
+              <div>
+                <h2 className="serif text-3xl text-white">Trait Input</h2>
+                <p className="text-slate-500 text-sm mt-1">Adjust sliders to match your tendencies.</p>
+              </div>
+              <div className="text-right hidden sm:block">
+                <span className="text-xs uppercase tracking-widest text-slate-500 block mb-1">Methodology</span>
+                <span className="text-sm text-indigo-300">Big Five Model</span>
+              </div>
+            </div>
+            <div className="grid gap-4 md:gap-8">
+              {(Object.keys(traits) as TraitKey[]).map((trait) => (
+                <Slider
+                  key={trait}
+                  trait={trait}
+                  value={traits[trait]}
+                  onChange={handleTraitChange}
+                  desc={getDesc(trait, traits[trait])}
+                />
+              ))}
+            </div>
+            <div className="mt-8 flex justify-center pb-12">
+              <button
+                onClick={handleCalculate}
+                className="group relative inline-flex items-center justify-center px-10 py-5 text-lg serif text-white transition-all duration-300 bg-slate-800 border border-indigo-500/50 rounded-lg hover:bg-indigo-900 hover:border-indigo-400 shadow-lg hover:shadow-indigo-500/20"
+              >
+                <span className="mr-3">Reveal Constellation</span>
+                <Icon name="auto_awesome" className="animate-pulse" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {view === 'processing' && (
+          <div className="flex flex-col items-center justify-center h-64 w-full">
+            <div className="relative w-24 h-24">
+              <div className="absolute inset-0 border-t-2 border-indigo-500 rounded-full animate-spin" />
+              <div
+                className="absolute inset-2 border-r-2 border-slate-600 rounded-full animate-spin"
+                style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Icon name="hub" className="text-indigo-300 text-3xl" />
+              </div>
+            </div>
+            <p className="mt-8 text-slate-400 serif text-xl animate-pulse">Mapping ecological strategies...</p>
+          </div>
+        )}
+
+        {view === 'results' && results.length > 0 && (
+          <div className="w-full animate-slide-up pb-20">
+            <div className="text-center mb-12">
+              <span className="text-indigo-300 text-sm tracking-[0.2em] uppercase mb-2 block">Your Archetype Map</span>
+              <h2 className="serif text-4xl text-white">Ecological Constellation</h2>
             </div>
 
-            <div className="pl-16">
-              <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-                <h3 className="text-2xl font-medium text-slate-900 dark:text-slate-100">{animal.name}</h3>
-                <div className="flex gap-2">
-                  {Object.entries(animal.traits).map(([k, v]) => (
-                    <span key={k} className="text-[10px] uppercase tracking-widest bg-slate-200 text-slate-600 px-2 py-1 rounded-sm dark:bg-slate-800 dark:text-slate-300">
-                      {k}:{v.replace('_', ' ')}
-                    </span>
+            {primaryResult && (
+              <div className="glass-panel p-1 rounded-2xl mb-8 relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-slate-400 to-indigo-500 opacity-70" />
+                <div className="grid md:grid-cols-2 gap-0">
+                  <div className="bg-slate-900/50 relative min-h-[400px]">
+                    <img
+                      src={primaryResult.image}
+                      alt={primaryResult.name}
+                      className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-screen"
+                    />
+                    <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded-full text-xs text-indigo-200 border border-indigo-500/30 backdrop-blur-sm">
+                      Primary Anchor
+                    </div>
+                  </div>
+                  <div className="p-8 md:p-12 flex flex-col justify-center">
+                    <h3 className="serif text-5xl text-white mb-2">{primaryResult.name}</h3>
+                    <p className="text-indigo-200 italic text-lg mb-6 serif">{primaryResult.tagline}</p>
+                    <div className="h-px w-16 bg-slate-700 mb-6" />
+                    <p className="text-slate-300 leading-relaxed mb-6">{primaryResult.desc}</p>
+                    <div className="space-y-3">
+                      <h4 className="text-sm text-slate-500 uppercase tracking-widest mb-3">Key Strategic Traits</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {primaryResult.keywords.map((keyword) => (
+                          <span
+                            key={keyword}
+                            className="px-3 py-1 bg-indigo-900/40 border border-indigo-500/30 rounded text-xs text-indigo-200"
+                          >
+                            {keyword}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="grid md:grid-cols-2 gap-6 mb-12">
+              {secondaryResults.map((animal, idx) => (
+                <div
+                  key={animal.id}
+                  className="glass-panel rounded-xl overflow-hidden p-6 flex flex-col hover:bg-slate-800/50 transition-colors animal-card-hover cursor-pointer group"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <img
+                      src={animal.image}
+                      alt={animal.name}
+                      className="w-16 h-16 rounded-full object-cover border border-slate-600 bg-slate-900 group-hover:border-indigo-400 transition-colors"
+                    />
+                    <div>
+                      <div className="text-xs text-indigo-300 uppercase tracking-wider mb-1">
+                        {idx === 0 ? 'Secondary Influence' : 'Tertiary Influence'}
+                      </div>
+                      <h3 className="serif text-2xl text-white">{animal.name}</h3>
+                    </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed">{animal.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setView('assessment')}
+                className="px-6 py-3 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full transition-all"
+              >
+                Refine Traits
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="px-6 py-3 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full transition-all flex items-center gap-2"
+              >
+                <Icon name="print" /> Save Map
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {isAboutOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+            <button
+              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              onClick={() => setIsAboutOpen(false)}
+            >
+              <Icon name="close" />
+            </button>
+            <div className="p-8">
+              <h2 className="serif text-3xl text-white mb-2">The Science Behind the Map</h2>
+              <p className="text-indigo-300 text-sm mb-6 uppercase tracking-wider">Ecological Strategy vs. Personality</p>
+              <div className="space-y-6 text-slate-300 leading-relaxed">
+                <p>
+                  This system uses the <strong className="text-white">Big Five</strong> personality model—the gold standard in
+                  modern psychology—and maps it to biological "ecological strategies."
+                </p>
+                <p>
+                  In nature, traits are not "good" or "bad"; they are trade-offs. A <em className="italic">Wolf's</em> high
+                  agreeableness is a survival mechanism for pack cohesion. An <em className="italic">Octopus's</em> low extraversion
+                  is a necessity for a solitary ambush predator.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                  {[
+                    ['Extraversion', 'Social Signaling Density & Reward Seeking'],
+                    ['Agreeableness', 'Conflict Resolution & Cooperation'],
+                    ['Conscientiousness', 'Future Investment & Delay Tolerance'],
+                    ['Openness', 'Exploratory Adaptation & Plasticity'],
+                    ['Neuroticism', 'Threat Sensitivity & Vigilance'],
+                  ].map(([title, desc]) => (
+                    <div key={title} className="bg-slate-800/50 p-4 rounded-lg">
+                      <strong className="text-indigo-300 block mb-1">{title}</strong>
+                      <span className="text-sm">{desc}</span>
+                    </div>
                   ))}
-                </div>
-              </div>
-
-              <p className="text-slate-700 dark:text-slate-200 text-lg mb-6 leading-relaxed border-l-2 border-slate-300 dark:border-slate-700 pl-4">
-                {animal.description}
-              </p>
-
-              {/* Dynamic Contextual Explanation */}
-              <div className="mb-6 text-sm text-slate-600 dark:text-slate-300 italic bg-white/50 dark:bg-slate-900/50 p-3 rounded">
-                "Aligns with your 
-                {animal.topMatches.map((m, i) => (
-                  <span key={i} className="font-medium text-slate-800 dark:text-slate-100">
-                    {i === 0 ? ' ' : ' and '} 
-                    {m.trait}
-                  </span>
-                ))}
-                {' '}tendencies."
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Effective Strengths</h4>
-                  <ul className="space-y-2">
-                    {animal.strengths.map(s => (
-                      <li key={s} className="text-sm text-slate-600 dark:text-slate-300 flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Potential Limitations</h4>
-                  <ul className="space-y-2">
-                    {animal.limitations.map(l => (
-                      <li key={l} className="text-sm text-slate-600 dark:text-slate-300 flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
-                        {l}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </div>
             </div>
           </div>
-        ))}
-      </div>
-
-      <div className="mt-12 bg-slate-50 dark:bg-slate-900/70 p-6 rounded-lg flex gap-4 items-start text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-        <Info className="shrink-0 mt-1" size={18} />
-        <p>
-          This constellation is non-deterministic. Animals represent ecological strategies—ways of solving problems in an environment—not fixed identities or moral categories. Your results reflect your current self-reported tendencies.
-        </p>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 selection:bg-slate-200 dark:selection:bg-slate-700">
-      <main className="container mx-auto px-6 py-12">
-        {screen === 'intro' && <IntroScreen />}
-        {screen === 'traits' && <TraitScreen />}
-        {screen === 'results' && <ResultsScreen />}
-      </main>
+        </div>
+      )}
     </div>
   );
 }
