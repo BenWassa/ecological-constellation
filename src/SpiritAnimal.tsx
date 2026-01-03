@@ -243,6 +243,7 @@ const Slider = ({ trait, value, onChange, desc, onTabPress }: SliderProps) => {
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             onKeyDown={handleInputKeyDown}
+            onFocus={(e) => e.target.select()}
             autoFocus
             className="text-2xl serif text-indigo-100 w-16 text-right bg-slate-800/50 border border-indigo-500/50 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
           />
