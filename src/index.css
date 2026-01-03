@@ -152,52 +152,106 @@
     print-color-adjust: exact !important;
   }
 
-  /* Single page with minimal margins */
+  /* Force single page with zero margins */
   @page {
-    margin: 0.25in;
+    margin: 0;
     size: letter;
   }
 
-  /* Prevent page breaks within sections */
-  .animate-slide-up {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* Keep the layout exactly as it appears on screen */
+  /* Remove default browser margins/padding */
+  html,
   body {
-    background: var(--background-print, #0f172a) !important;
     margin: 0 !important;
     padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 
-  /* No font size changes - keep original */
-  body,
-  p,
-  h2,
-  h3,
-  h4,
-  span {
-    font-size: inherit !important;
+  main {
+    margin: 0 !important;
+    padding: 0.4in !important;
+    width: 100% !important;
   }
 
-  /* Keep all spacing as-is */
-  .mb-8,
-  .mb-12,
-  .pb-20 {
-    margin-bottom: inherit !important;
-    padding-bottom: inherit !important;
+  /* Prevent page breaks */
+  .animate-slide-up {
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    widows: 1 !important;
+    orphans: 1 !important;
   }
 
-  /* Keep images at full quality and size */
+  /* Shrink primary image to fit on one page */
+  [class*="min-h"] {
+    min-height: auto !important;
+  }
+
   .result-image {
     filter: saturate(1.05) !important;
     opacity: 1 !important;
+    max-height: 250px !important;
+    height: auto !important;
   }
 
-  /* Maintain grid layout */
-  .grid {
-    grid-template-columns: inherit !important;
+  /* Reduce padding on primary result */
+  .md\\:grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  /* Compact the content sections */
+  .p-8,
+  .p-12 {
+    padding: 0.5rem !important;
+  }
+
+  /* Reduce spacing between sections */
+  .mb-8 {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .mb-12 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 0.25rem !important;
+  }
+
+  .mb-6 {
+    margin-bottom: 0.4rem !important;
+  }
+
+  /* Reduce text sizes slightly for fit */
+  .text-5xl {
+    font-size: 1.75rem !important;
+  }
+
+  .text-4xl {
+    font-size: 1.5rem !important;
+  }
+
+  .text-2xl {
+    font-size: 1.1rem !important;
+  }
+
+  .text-lg {
+    font-size: 0.95rem !important;
+  }
+
+  .text-sm {
+    font-size: 0.85rem !important;
+  }
+
+  .text-xs {
+    font-size: 0.75rem !important;
+  }
+
+  /* Reduce line height */
+  body {
+    line-height: 1.2 !important;
   }
 
   /* Keep original colors and styling */
@@ -241,5 +295,26 @@
   [class*="bg-indigo"] {
     background: rgba(79, 70, 229, 0.4) !important;
     border-color: rgba(99, 102, 241, 0.3) !important;
+  }
+
+  /* Compact secondary results */
+  .animal-card-hover {
+    page-break-inside: avoid !important;
+  }
+
+  .grid.md\\:grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Reduce image sizes in secondary cards */
+  .w-16 {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  /* Remove bottom padding from main content */
+  .pb-20 {
+    padding-bottom: 0 !important;
   }
 }
