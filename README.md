@@ -12,18 +12,18 @@ Animals are used as symbolic representations of adaptive strategies, not fixed i
 
 This project is grounded in two principles:
 
-1. Personality traits are continuous, not categorical  
+1. Personality traits are continuous, not categorical
 2. Animals represent ecological solutions, not personalities
 
 The system is based on the Big Five model and translates each trait into a biologically interpretable axis:
 
-| Big Five Trait | Ecological Interpretation |
-|---------------|--------------------------|
-| Openness | Exploratory adaptation and niche flexibility |
-| Conscientiousness | Future investment and delay tolerance |
-| Extraversion | Social signaling density and energy |
-| Agreeableness | Cooperation and conflict resolution |
-| Neuroticism | Threat sensitivity and vigilance |
+| Big Five Trait    | Ecological Interpretation                    |
+| ----------------- | -------------------------------------------- |
+| Openness          | Exploratory adaptation and niche flexibility |
+| Conscientiousness | Future investment and delay tolerance        |
+| Extraversion      | Social signaling density and energy          |
+| Agreeableness     | Cooperation and conflict resolution          |
+| Neuroticism       | Threat sensitivity and vigilance             |
 
 Outputs are interpretive and contextual. They describe tendencies, not destiny.
 
@@ -37,11 +37,11 @@ Users input Big Five traits on a 0–100 scale using sliders.
 
 These values are displayed numerically for clarity but are internally converted into conceptual bands:
 
-| Range | Band |
-|-----|------|
-| 0–35 | Low |
-| 36–65 | Moderate |
-| 66–85 | High |
+| Range  | Band      |
+| ------ | --------- |
+| 0–35   | Low       |
+| 36–65  | Moderate  |
+| 66–85  | High      |
 | 86–100 | Very High |
 
 Banding avoids false precision and keeps results psychologically interpretable.
@@ -73,11 +73,13 @@ traits: {
 Trait matching is band-based and weighted.
 
 Scoring rules:
+
 - Exact band match: +3
 - Adjacent band match: +1
 - Distant mismatch: −2
 
 Trait weights:
+
 - Openness: ×1.2
 - Conscientiousness: ×1.2
 - Neuroticism: ×0.8
@@ -92,6 +94,7 @@ Only the Top 3 matches are returned.
 ### 4. Output
 
 Results are presented as a constellation:
+
 - Ranked Top 3 animals
 - Each with a short ecological description
 - Effective strengths
@@ -103,6 +106,7 @@ Language emphasizes strategies and contexts rather than identity claims.
 ---
 
 ## Design Principles
+
 - No single personality type
 - No gamification
 - No moral framing
@@ -114,6 +118,7 @@ The system is designed to feel reflective, grounded, and intellectually honest.
 ---
 
 ## Tech Stack
+
 - React (functional components)
 - Tailwind CSS
 - Lucide icons
@@ -126,6 +131,7 @@ Core logic is isolated and easily testable.
 ## Extensibility
 
 You can:
+
 - Add new animals by extending the animal data array
 - Adjust trait weights centrally
 - Modify band thresholds
@@ -147,4 +153,3 @@ Results may shift across time, context, and self-understanding.
 ## License
 
 TBD
-

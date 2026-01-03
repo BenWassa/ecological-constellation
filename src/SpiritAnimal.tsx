@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Particles from './components/Particles';
 import wolfImg from '../images/Wolf.png';
 import elephantImg from '../images/Elephant.png';
@@ -117,11 +117,41 @@ const animals: Animal[] = [
 ];
 
 const descriptions: Record<TraitKey, string[]> = {
-  E: ['Solitary, Reserved', 'Selective, Quiet', 'Balanced Socially', 'Outgoing, Talkative', 'High Density Signaling'],
-  A: ['Competitive, Skeptical', 'Direct, Guarded', 'Negotiator', 'Cooperative, Warm', 'Selfless, Trusting'],
-  C: ['Spontaneous, Improvising', 'Flexible, Casual', 'Organized', 'Diligent, Focused', 'Rigidly Disciplined'],
-  O: ['Pragmatic, Routine', 'Traditional', 'Balanced', 'Curious, Creative', 'Abstract, Experimental'],
-  N: ['Unshakeable, Calm', 'Resilient', 'Responsive', 'Alert, Cautious', 'Hyper-Vigilant'],
+  E: [
+    'Solitary, Reserved',
+    'Selective, Quiet',
+    'Balanced Socially',
+    'Outgoing, Talkative',
+    'High Density Signaling',
+  ],
+  A: [
+    'Competitive, Skeptical',
+    'Direct, Guarded',
+    'Negotiator',
+    'Cooperative, Warm',
+    'Selfless, Trusting',
+  ],
+  C: [
+    'Spontaneous, Improvising',
+    'Flexible, Casual',
+    'Organized',
+    'Diligent, Focused',
+    'Rigidly Disciplined',
+  ],
+  O: [
+    'Pragmatic, Routine',
+    'Traditional',
+    'Balanced',
+    'Curious, Creative',
+    'Abstract, Experimental',
+  ],
+  N: [
+    'Unshakeable, Calm',
+    'Resilient',
+    'Responsive',
+    'Alert, Cautious',
+    'Hyper-Vigilant',
+  ],
 };
 
 const traitNames: Record<TraitKey, string> = {
@@ -140,9 +170,13 @@ const traitRanges: Record<TraitKey, [string, string]> = {
   N: ['Resilient / Stable', 'Reactive / Alert'],
 };
 
-const Icon = ({ name, className = '' }: { name: string; className?: string }) => (
-  <span className={`material-symbols-outlined ${className}`}>{name}</span>
-);
+const Icon = ({
+  name,
+  className = '',
+}: {
+  name: string;
+  className?: string;
+}) => <span className={`material-symbols-outlined ${className}`}>{name}</span>;
 
 type SliderProps = {
   trait: TraitKey;
@@ -155,12 +189,16 @@ const Slider = ({ trait, value, onChange, desc }: SliderProps) => (
   <div className="trait-group group mb-12">
     <div className="flex justify-between mb-4 items-end">
       <div>
-        <h3 className="text-lg font-medium text-slate-200">{traitNames[trait]}</h3>
+        <h3 className="text-lg font-medium text-slate-200">
+          {traitNames[trait]}
+        </h3>
         <p className="text-sm text-slate-300 min-h-[1.25rem] transition-colors duration-300 group-hover:text-indigo-200">
           {desc}
         </p>
       </div>
-      <span className="text-2xl serif text-indigo-100 w-12 text-right">{value}</span>
+      <span className="text-2xl serif text-indigo-100 w-12 text-right">
+        {value}
+      </span>
     </div>
     <input
       type="range"
@@ -200,7 +238,9 @@ const calculateResults = (traits: Record<TraitKey, number>) => {
 };
 
 export default function AnimalConstellationApp() {
-  const [view, setView] = useState<'intro' | 'assessment' | 'processing' | 'results'>('intro');
+  const [view, setView] = useState<
+    'intro' | 'assessment' | 'processing' | 'results'
+  >('intro');
   const [traits, setTraits] = useState<Record<TraitKey, number>>({
     E: 50,
     A: 50,
@@ -263,7 +303,9 @@ export default function AnimalConstellationApp() {
           onClick={() => setView('intro')}
         >
           <Icon name="hub" className="text-indigo-200" />
-          <span className="serif text-xl tracking-wider text-slate-100">ARCHETYPE MAP</span>
+          <span className="serif text-xl tracking-wider text-slate-100">
+            ARCHETYPE MAP
+          </span>
         </button>
         <div className="flex gap-6 items-center">
           <button
@@ -285,15 +327,20 @@ export default function AnimalConstellationApp() {
               </span>
             </h1>
             <p className="text-lg text-slate-200 mb-12 font-light leading-relaxed">
-              Beyond simple labels. This system translates your Big Five personality traits into a weighted constellation of
-              ecological strategies. Are you a pack-oriented coordinator, a solitary specialist, or an adaptable generalist?
+              Beyond simple labels. This system translates your Big Five
+              personality traits into a weighted constellation of ecological
+              strategies. Are you a pack-oriented coordinator, a solitary
+              specialist, or an adaptable generalist?
             </p>
             <button
               onClick={() => setView('assessment')}
               className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white transition-all duration-200 bg-indigo-900/50 border border-indigo-500/30 rounded-full hover:bg-indigo-800/50 hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             >
               <span className="mr-2">Begin Mapping</span>
-              <Icon name="arrow_forward" className="group-hover:translate-x-1 transition-transform" />
+              <Icon
+                name="arrow_forward"
+                className="group-hover:translate-x-1 transition-transform"
+              />
             </button>
           </div>
         )}
@@ -303,10 +350,14 @@ export default function AnimalConstellationApp() {
             <div className="w-full flex justify-between items-end mb-12 border-b border-slate-800 pb-4">
               <div>
                 <h2 className="serif text-3xl text-white">Trait Input</h2>
-                <p className="text-slate-300 text-sm mt-1">Adjust sliders to match your tendencies.</p>
+                <p className="text-slate-300 text-sm mt-1">
+                  Adjust sliders to match your tendencies.
+                </p>
               </div>
               <div className="text-right hidden sm:block">
-                <span className="text-xs uppercase tracking-widest text-slate-400 block mb-1">Methodology</span>
+                <span className="text-xs uppercase tracking-widest text-slate-400 block mb-1">
+                  Methodology
+                </span>
                 <span className="text-sm text-indigo-200">Big Five Model</span>
               </div>
             </div>
@@ -339,21 +390,30 @@ export default function AnimalConstellationApp() {
               <div className="absolute inset-0 border-t-2 border-indigo-500 rounded-full animate-spin" />
               <div
                 className="absolute inset-2 border-r-2 border-slate-600 rounded-full animate-spin"
-                style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}
+                style={{
+                  animationDirection: 'reverse',
+                  animationDuration: '1.5s',
+                }}
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <Icon name="hub" className="text-indigo-300 text-3xl" />
               </div>
             </div>
-            <p className="mt-8 text-slate-200 serif text-xl animate-pulse">Mapping ecological strategies...</p>
+            <p className="mt-8 text-slate-200 serif text-xl animate-pulse">
+              Mapping ecological strategies...
+            </p>
           </div>
         )}
 
         {view === 'results' && results.length > 0 && (
           <div className="w-full animate-slide-up pb-20">
             <div className="text-center mb-12">
-              <span className="text-indigo-200 text-sm tracking-[0.2em] uppercase mb-2 block">Your Archetype Map</span>
-              <h2 className="serif text-4xl text-white">Ecological Constellation</h2>
+              <span className="text-indigo-200 text-sm tracking-[0.2em] uppercase mb-2 block">
+                Your Archetype Map
+              </span>
+              <h2 className="serif text-4xl text-white">
+                Ecological Constellation
+              </h2>
             </div>
 
             {primaryResult && (
@@ -371,12 +431,20 @@ export default function AnimalConstellationApp() {
                     </div>
                   </div>
                   <div className="p-8 md:p-12 flex flex-col justify-center">
-                    <h3 className="serif text-5xl text-white mb-2">{primaryResult.name}</h3>
-                    <p className="text-indigo-100 italic text-lg mb-6 serif">{primaryResult.tagline}</p>
+                    <h3 className="serif text-5xl text-white mb-2">
+                      {primaryResult.name}
+                    </h3>
+                    <p className="text-indigo-100 italic text-lg mb-6 serif">
+                      {primaryResult.tagline}
+                    </p>
                     <div className="h-px w-16 bg-slate-700 mb-6" />
-                    <p className="text-slate-200 leading-relaxed mb-6">{primaryResult.desc}</p>
+                    <p className="text-slate-200 leading-relaxed mb-6">
+                      {primaryResult.desc}
+                    </p>
                     <div className="space-y-3">
-                      <h4 className="text-sm text-slate-300 uppercase tracking-widest mb-3">Key Strategic Traits</h4>
+                      <h4 className="text-sm text-slate-300 uppercase tracking-widest mb-3">
+                        Key Strategic Traits
+                      </h4>
                       <div className="flex flex-wrap gap-2">
                         {primaryResult.keywords.map((keyword) => (
                           <span
@@ -407,12 +475,18 @@ export default function AnimalConstellationApp() {
                     />
                     <div>
                       <div className="text-xs text-indigo-200 uppercase tracking-wider mb-1">
-                        {idx === 0 ? 'Secondary Influence' : 'Tertiary Influence'}
+                        {idx === 0
+                          ? 'Secondary Influence'
+                          : 'Tertiary Influence'}
                       </div>
-                      <h3 className="serif text-2xl text-white">{animal.name}</h3>
+                      <h3 className="serif text-2xl text-white">
+                        {animal.name}
+                      </h3>
                     </div>
                   </div>
-                  <p className="text-slate-200 text-sm leading-relaxed">{animal.desc}</p>
+                  <p className="text-slate-200 text-sm leading-relaxed">
+                    {animal.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -445,28 +519,57 @@ export default function AnimalConstellationApp() {
               <Icon name="close" />
             </button>
             <div className="p-8">
-              <h2 className="serif text-3xl text-white mb-2">The Science Behind the Map</h2>
-              <p className="text-indigo-200 text-sm mb-6 uppercase tracking-wider">Ecological Strategy vs. Personality</p>
+              <h2 className="serif text-3xl text-white mb-2">
+                The Science Behind the Map
+              </h2>
+              <p className="text-indigo-200 text-sm mb-6 uppercase tracking-wider">
+                Ecological Strategy vs. Personality
+              </p>
               <div className="space-y-6 text-slate-200 leading-relaxed">
                 <p>
-                  This system uses the <strong className="text-white">Big Five</strong> personality model—the gold standard in
-                  modern psychology—and maps it to biological "ecological strategies."
+                  This system uses the{' '}
+                  <strong className="text-white">Big Five</strong> personality
+                  model—the gold standard in modern psychology—and maps it to
+                  biological "ecological strategies."
                 </p>
                 <p>
-                  In nature, traits are not "good" or "bad"; they are trade-offs. A <em className="italic">Wolf's</em> high
-                  agreeableness is a survival mechanism for pack cohesion. An <em className="italic">Octopus's</em> low extraversion
-                  is a necessity for a solitary ambush predator.
+                  Prefer a standardized assessment? Take the full Big Five test
+                  at{' '}
+                  <a
+                    href="https://bigfive-test.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-indigo-100 underline underline-offset-4 hover:text-white"
+                  >
+                    bigfive-test.com
+                  </a>
+                  .
+                </p>
+                <p>
+                  In nature, traits are not "good" or "bad"; they are
+                  trade-offs. A <em className="italic">Wolf's</em> high
+                  agreeableness is a survival mechanism for pack cohesion. An{' '}
+                  <em className="italic">Octopus's</em> low extraversion is a
+                  necessity for a solitary ambush predator.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
                   {[
-                    ['Extraversion', 'Social Signaling Density & Reward Seeking'],
+                    [
+                      'Extraversion',
+                      'Social Signaling Density & Reward Seeking',
+                    ],
                     ['Agreeableness', 'Conflict Resolution & Cooperation'],
-                    ['Conscientiousness', 'Future Investment & Delay Tolerance'],
+                    [
+                      'Conscientiousness',
+                      'Future Investment & Delay Tolerance',
+                    ],
                     ['Openness', 'Exploratory Adaptation & Plasticity'],
                     ['Neuroticism', 'Threat Sensitivity & Vigilance'],
                   ].map(([title, desc]) => (
                     <div key={title} className="bg-slate-800/50 p-4 rounded-lg">
-                      <strong className="text-indigo-200 block mb-1">{title}</strong>
+                      <strong className="text-indigo-200 block mb-1">
+                        {title}
+                      </strong>
                       <span className="text-sm">{desc}</span>
                     </div>
                   ))}

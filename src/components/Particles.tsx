@@ -126,7 +126,7 @@ const Particles = ({
     const renderer = new Renderer({
       dpr: pixelRatio,
       depth: false,
-      alpha: true
+      alpha: true,
     });
     const gl = renderer.gl;
     container.appendChild(gl.canvas);
@@ -159,7 +159,10 @@ const Particles = ({
     const positions = new Float32Array(count * 3);
     const randoms = new Float32Array(count * 4);
     const colors = new Float32Array(count * 3);
-    const palette = particleColors && particleColors.length > 0 ? particleColors : defaultColors;
+    const palette =
+      particleColors && particleColors.length > 0
+        ? particleColors
+        : defaultColors;
 
     for (let i = 0; i < count; i++) {
       let x, y, z, len;
@@ -171,7 +174,10 @@ const Particles = ({
       } while (len > 1 || len === 0);
       const r = Math.cbrt(Math.random());
       positions.set([x * r, y * r, z * r], i * 3);
-      randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4);
+      randoms.set(
+        [Math.random(), Math.random(), Math.random(), Math.random()],
+        i * 4
+      );
       const col = hexToRgb(palette[Math.floor(Math.random() * palette.length)]);
       colors.set(col, i * 3);
     }
@@ -179,7 +185,7 @@ const Particles = ({
     const geometry = new Geometry(gl, {
       position: { size: 3, data: positions },
       random: { size: 4, data: randoms },
-      color: { size: 3, data: colors }
+      color: { size: 3, data: colors },
     });
 
     const program = new Program(gl, {
@@ -190,10 +196,10 @@ const Particles = ({
         uSpread: { value: particleSpread },
         uBaseSize: { value: particleBaseSize * pixelRatio },
         uSizeRandomness: { value: sizeRandomness },
-        uAlphaParticles: { value: alphaParticles ? 1 : 0 }
+        uAlphaParticles: { value: alphaParticles ? 1 : 0 },
       },
       transparent: true,
-      depthTest: false
+      depthTest: false,
     });
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
@@ -251,10 +257,12 @@ const Particles = ({
     sizeRandomness,
     cameraDistance,
     disableRotation,
-    pixelRatio
+    pixelRatio,
   ]);
 
-  return <div ref={containerRef} className={`particles-container ${className}`} />;
+  return (
+    <div ref={containerRef} className={`particles-container ${className}`} />
+  );
 };
 
 export default Particles;
