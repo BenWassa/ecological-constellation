@@ -138,150 +138,108 @@
 
 /* Print Styles for Archetype Map */
 @media print {
-  /* Hide interactive elements */
+  /* Hide only the buttons and dialogs */
   button,
   .fixed,
-  [role="dialog"],
-  .backdrop-blur-sm {
+  [role="dialog"] {
     display: none !important;
   }
 
-  /* Allow background graphics and images */
+  /* Preserve exact colors and backgrounds */
   * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Force single page layout */
+  /* Single page with minimal margins */
   @page {
-    margin: 0.5in;
+    margin: 0.25in;
     size: letter;
   }
 
-  /* Prevent any page breaks */
-  .animate-slide-up,
-  .glass-panel,
-  .animal-card-hover,
-  .grid,
-  .mb-8,
-  .mb-12,
-  .text-center,
-  .w-full {
+  /* Prevent page breaks within sections */
+  .animate-slide-up {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  /* Make content more compact for single page */
+  /* Keep the layout exactly as it appears on screen */
   body {
-    font-size: 11pt !important;
-    line-height: 1.3 !important;
+    background: var(--background-print, #0f172a) !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* Reduce margins and spacing */
-  .mb-8 {
-    margin-bottom: 1rem !important;
+  /* No font size changes - keep original */
+  body,
+  p,
+  h2,
+  h3,
+  h4,
+  span {
+    font-size: inherit !important;
   }
 
-  .mb-12 {
-    margin-bottom: 1.5rem !important;
-  }
-
+  /* Keep all spacing as-is */
+  .mb-8,
+  .mb-12,
   .pb-20 {
-    padding-bottom: 1rem !important;
+    margin-bottom: inherit !important;
+    padding-bottom: inherit !important;
   }
 
-  /* Make images smaller but keep quality */
+  /* Keep images at full quality and size */
   .result-image {
-    filter: none !important;
+    filter: saturate(1.05) !important;
     opacity: 1 !important;
-    max-height: 300px !important;
   }
 
-  .w-16 {
-    width: 3rem !important;
-    height: 3rem !important;
-  }
-
-  /* Secondary results grid - make single column and more compact */
+  /* Maintain grid layout */
   .grid {
-    grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
+    grid-template-columns: inherit !important;
   }
 
-  /* Animal cards styling - more compact */
-  .animal-card-hover {
-    padding: 1rem !important;
-    margin-bottom: 0.5rem !important;
-  }
-
-  /* Primary result - make more compact */
-  .p-8 {
-    padding: 1.5rem !important;
-  }
-
-  .p-12 {
-    padding: 2rem !important;
-  }
-
-  /* Text size adjustments for single page */
-  .text-4xl {
-    font-size: 2rem !important;
-  }
-
-  .text-5xl {
-    font-size: 2.5rem !important;
-  }
-
-  .text-2xl {
-    font-size: 1.25rem !important;
-  }
-
-  .text-lg {
-    font-size: 1rem !important;
-  }
-
-  /* Ensure backgrounds print */
-  .glass-panel {
-    background: white !important;
-    border: 2px solid #e2e8f0 !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-  }
-
-  /* Text color adjustments for readability */
+  /* Keep original colors and styling */
   .text-white {
-    color: black !important;
+    color: white !important;
   }
 
   .text-slate-200 {
-    color: #374151 !important;
+    color: rgb(203, 213, 225) !important;
   }
 
   .text-slate-300 {
-    color: #6b7280 !important;
+    color: rgb(203, 213, 225) !important;
   }
 
   .text-indigo-100 {
-    color: #1e40af !important;
+    color: rgb(224, 231, 255) !important;
   }
 
   .text-indigo-200 {
-    color: #3730a3 !important;
+    color: rgb(199, 210, 254) !important;
   }
 
   .text-slate-400 {
-    color: #9ca3af !important;
+    color: rgb(148, 163, 184) !important;
   }
 
   .text-slate-500 {
-    color: #6b7280 !important;
+    color: rgb(100, 116, 139) !important;
   }
 
-  /* Badge styling */
+  /* Keep glass panels as they appear */
+  .glass-panel {
+    background: rgba(15, 23, 42, 0.5) !important;
+    border: 1px solid rgba(148, 163, 184, 0.12) !important;
+    box-shadow: 0 25px 50px -20px rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(18px) !important;
+  }
+
+  /* Keep badges with their colors */
   [class*="bg-indigo"] {
-    background: #e0e7ff !important;
-    border-color: #6366f1 !important;
-    color: #1e40af !important;
+    background: rgba(79, 70, 229, 0.4) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
   }
 }
