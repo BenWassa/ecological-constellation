@@ -246,6 +246,13 @@ export default function AnimalConstellationApp() {
     | 'processing'
     | 'results'
   >('intro');
+  const [traits, setTraits] = useState<Record<TraitKey, number>>({
+    E: 50,
+    A: 50,
+    C: 50,
+    O: 50,
+    N: 50,
+  });
   const [testId, setTestId] = useState('');
   const [results, setResults] = useState<(Animal & { score: number })[]>([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
