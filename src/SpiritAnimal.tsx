@@ -239,8 +239,17 @@ const calculateResults = (traits: Record<TraitKey, number>) => {
 
 export default function AnimalConstellationApp() {
   const [view, setView] = useState<
-    'intro' | 'assessment' | 'processing' | 'results'
+    | 'intro'
+    | 'method-select'
+    | 'assessment'
+    | 'external-test-info'
+    | 'manual-entry'
+    | 'processing'
+    | 'results'
   >('intro');
+  const [inputMethod, setInputMethod] = useState<'estimate' | 'manual' | null>(
+    null,
+  );
   const [traits, setTraits] = useState<Record<TraitKey, number>>({
     E: 50,
     A: 50,
@@ -248,11 +257,13 @@ export default function AnimalConstellationApp() {
     O: 50,
     N: 50,
   });
+  const [testId, setTestId] = useState('');
   const [results, setResults] = useState<(Animal & { score: number })[]>([]);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   const handleTraitChange = (trait: TraitKey, value: number) => {
-    setTraits((prev) => ({ ...prev, [trait]: value }));
+    const nextValue = Math.min(100, Math.max(0, value));
+    setTraits((prev) => ({ ...prev, [trait]: nextValue }));
   };
 
   const handleCalculate = () => {
@@ -333,7 +344,7 @@ export default function AnimalConstellationApp() {
               specialist, or an adaptable generalist?
             </p>
             <button
-              onClick={() => setView('assessment')}
+              onClick={() => setView('method-select')}
               className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white transition-all duration-200 bg-indigo-900/50 border border-indigo-500/30 rounded-full hover:bg-indigo-800/50 hover:border-indigo-400/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]"
             >
               <span className="mr-2">Begin Mapping</span>
@@ -342,6 +353,64 @@ export default function AnimalConstellationApp() {
                 className="group-hover:translate-x-1 transition-transform"
               />
             </button>
+          </div>
+        )}
+
+        {view === 'method-select' && (
+          <div className="w-full animate-fade-in">
+            <div className="text-center mb-10">
+              <h2 className="serif text-3xl text-white mb-2">
+                Choose Your Input Method
+              </h2>
+              <p className="text-slate-300 text-sm">
+                Start with a quick estimate or bring your existing Big Five
+                scores.
+              </p>
+            </div>
+            <div className="grid gap-4">
+              {[
+                {
+                  title: 'Estimate my traits (quick)',
+                  desc: 'Adjust sliders to approximate your tendencies.',
+                  action: () => {
+                    setInputMethod('estimate');
+                    setView('assessment');
+                  },
+                },
+                {
+                  title: 'I already have Big Five results',
+                  desc: 'Enter your numeric O C E A N scores.',
+                  action: () => {
+                    setInputMethod('manual');
+                    setView('manual-entry');
+                  },
+                },
+                {
+                  title: 'Take a full Big Five test',
+                  desc: 'Use a standardized external assessment.',
+                  action: () => setView('external-test-info'),
+                },
+              ].map((option) => (
+                <button
+                  key={option.title}
+                  onClick={option.action}
+                  className="glass-panel rounded-xl p-6 text-left hover:bg-slate-800/50 transition-colors group"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h3 className="serif text-2xl text-white mb-2">
+                        {option.title}
+                      </h3>
+                      <p className="text-sm text-slate-300">{option.desc}</p>
+                    </div>
+                    <Icon
+                      name="arrow_forward"
+                      className="text-indigo-200 group-hover:translate-x-1 transition-transform"
+                    />
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
@@ -371,6 +440,134 @@ export default function AnimalConstellationApp() {
                   desc={getDesc(trait, traits[trait])}
                 />
               ))}
+            </div>
+            <div className="mt-8 flex justify-center pb-12">
+              <button
+                onClick={handleCalculate}
+                className="group relative inline-flex items-center justify-center px-10 py-5 text-lg serif text-white transition-all duration-300 bg-slate-800 border border-indigo-500/50 rounded-lg hover:bg-indigo-900 hover:border-indigo-400 shadow-lg hover:shadow-indigo-500/20"
+              >
+                <span className="mr-3">Reveal Constellation</span>
+                <Icon name="auto_awesome" className="animate-pulse" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {view === 'external-test-info' && (
+          <div className="w-full max-w-2xl animate-fade-in">
+            <div className="glass-panel rounded-2xl p-8 space-y-6">
+              <div>
+                <h2 className="serif text-3xl text-white mb-2">
+                  External Big Five Test
+                </h2>
+                <p className="text-slate-300 text-sm">
+                  You will complete a standardized assessment on another site.
+                </p>
+              </div>
+              <div className="space-y-3 text-slate-200 leading-relaxed">
+                <p>This site does not administer personality tests.</p>
+                <p>You will receive numeric scores for O C E A N.</p>
+                <p>Save your Test ID or results page for future use.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href="https://bigfive-test.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center justify-center px-6 py-3 text-sm text-white bg-indigo-900/50 border border-indigo-500/30 rounded-full hover:bg-indigo-800/50 hover:border-indigo-400/50 transition-all"
+                >
+                  Go to Big Five Test
+                  <Icon
+                    name="open_in_new"
+                    className="ml-2 text-indigo-200 group-hover:translate-x-0.5 transition-transform"
+                  />
+                </a>
+                <button
+                  onClick={() => {
+                    setInputMethod('manual');
+                    setView('manual-entry');
+                  }}
+                  className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all"
+                >
+                  I already have my results
+                </button>
+              </div>
+              <button
+                onClick={() => setView('method-select')}
+                className="text-xs text-slate-400 hover:text-slate-200 uppercase tracking-widest"
+              >
+                Back to method selection
+              </button>
+            </div>
+          </div>
+        )}
+
+        {view === 'manual-entry' && (
+          <div className="w-full animate-fade-in">
+            <div className="w-full flex justify-between items-end mb-10 border-b border-slate-800 pb-4">
+              <div>
+                <h2 className="serif text-3xl text-white">
+                  Manual Score Entry
+                </h2>
+                <p className="text-slate-300 text-sm mt-1">
+                  Enter your Big Five scores (0–100).
+                </p>
+              </div>
+              <div className="text-right hidden sm:block">
+                <span className="text-xs uppercase tracking-widest text-slate-400 block mb-1">
+                  Format
+                </span>
+                <span className="text-sm text-indigo-200">
+                  O C E A N Scores
+                </span>
+              </div>
+            </div>
+            <div className="grid gap-4">
+              {(
+                [
+                  ['O', 'Openness'],
+                  ['C', 'Conscientiousness'],
+                  ['E', 'Extraversion'],
+                  ['A', 'Agreeableness'],
+                  ['N', 'Neuroticism'],
+                ] as [TraitKey, string][]
+              ).map(([trait, label]) => (
+                <label
+                  key={trait}
+                  className="glass-panel rounded-xl p-5 flex items-center justify-between gap-6"
+                >
+                  <div>
+                    <h3 className="text-lg text-white">{label}</h3>
+                    <p className="text-xs text-slate-400">
+                      0 (low) to 100 (high)
+                    </p>
+                  </div>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value={traits[trait]}
+                    onChange={(e) =>
+                      handleTraitChange(trait, Number(e.target.value))
+                    }
+                    className="w-24 text-right bg-slate-900/60 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  />
+                </label>
+              ))}
+            </div>
+            <div className="mt-8 glass-panel rounded-xl p-5">
+              <label className="block text-sm text-slate-300 mb-2">
+                Test ID (for your reference)
+              </label>
+              <input
+                type="text"
+                value={testId}
+                onChange={(e) => setTestId(e.target.value)}
+                placeholder="Optional"
+                className="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              />
             </div>
             <div className="mt-8 flex justify-center pb-12">
               <button
@@ -414,6 +611,17 @@ export default function AnimalConstellationApp() {
               <h2 className="serif text-4xl text-white">
                 Ecological Constellation
               </h2>
+              {testId.trim().length > 0 && (
+                <div className="mt-4 inline-flex flex-col items-center gap-1">
+                  <span className="text-xs uppercase tracking-widest text-slate-400">
+                    Associated Test ID
+                  </span>
+                  <span className="text-sm text-indigo-100">{testId}</span>
+                  <span className="text-[11px] text-slate-500">
+                    User-supplied reference
+                  </span>
+                </div>
+              )}
             </div>
 
             {primaryResult && (
@@ -493,7 +701,9 @@ export default function AnimalConstellationApp() {
 
             <div className="flex justify-center gap-4">
               <button
-                onClick={() => setView('assessment')}
+                onClick={() =>
+                  setView(inputMethod === 'manual' ? 'manual-entry' : 'assessment')
+                }
                 className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all"
               >
                 Refine Traits
@@ -533,6 +743,15 @@ export default function AnimalConstellationApp() {
                   biological "ecological strategies."
                 </p>
                 <p>
+                  Big Five results are measurements. This app is an{' '}
+                  <span className="text-indigo-100">interpretive framework</span>{' '}
+                  that translates those measurements into contextual strategies.
+                </p>
+                <p>
+                  The map is <span className="text-indigo-100">non-diagnostic</span>{' '}
+                  and designed to support exploration, not clinical assessment.
+                </p>
+                <p>
                   Prefer a standardized assessment? Take the full Big Five test
                   at{' '}
                   <a
@@ -551,6 +770,12 @@ export default function AnimalConstellationApp() {
                   agreeableness is a survival mechanism for pack cohesion. An{' '}
                   <em className="italic">Octopus's</em> low extraversion is a
                   necessity for a solitary ambush predator.
+                </p>
+                <p>
+                  We focus on{' '}
+                  <span className="text-indigo-100">contextual strategies</span>{' '}
+                  rather than fixed labels, emphasizing how environments shape
+                  expression.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
                   {[

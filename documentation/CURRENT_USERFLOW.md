@@ -7,7 +7,8 @@ It is a technical description of what exists now (not the intended canonical flo
 High-level state machine
 
 - Single-page app with in-memory view state.
-- View states: `intro` -> `assessment` -> `processing` -> `results`.
+- View states: `intro` -> `method-select` -> `assessment` or `manual-entry` -> `processing` -> `results`.
+- Additional view: `external-test-info` (external test handoff).
 - Navigation is controlled by local React state, not routing.
 
 Entry point
@@ -31,9 +32,17 @@ View: Intro (`view === 'intro'`)
 - Content:
   - Title: "Discover Your Ecological Constellation".
   - Description of Big Five translation to ecological strategies.
-  - Primary CTA: "Begin Mapping".
+- Primary CTA: "Begin Mapping".
 - Action:
-  - Clicking "Begin Mapping" sets `view = 'assessment'`.
+  - Clicking "Begin Mapping" sets `view = 'method-select'`.
+
+View: Method Select (`view === 'method-select'`)
+
+- Purpose: choose estimation vs. external test vs. manual entry.
+- Options:
+  - "Estimate my traits (quick)" -> `view = 'assessment'`.
+  - "I already have Big Five results" -> `view = 'manual-entry'`.
+  - "Take a full Big Five test" -> `view = 'external-test-info'`.
 
 View: Assessment (`view === 'assessment'`)
 
@@ -49,7 +58,27 @@ View: Assessment (`view === 'assessment'`)
   - Trait values are initialized to 50 for all traits.
 - Behavior:
   - Slider change updates local `traits` state.
-  - CTA: "Reveal Constellation" triggers `handleCalculate()`.
+- CTA: "Reveal Constellation" triggers `handleCalculate()`.
+
+View: External Test Info (`view === 'external-test-info'`)
+
+- Purpose: explain external test and data ownership.
+- Content includes:
+  - "This site does not administer personality tests."
+  - "You will receive numeric scores for O C E A N."
+  - "Save your Test ID or results page for future use."
+- Actions:
+  - "Go to Big Five Test" opens `https://bigfive-test.com` in a new tab.
+  - "I already have my results" sets `view = 'manual-entry'`.
+  - "Back to method selection" sets `view = 'method-select'`.
+
+View: Manual Entry (`view === 'manual-entry'`)
+
+- Purpose: numeric Big Five input.
+- Inputs:
+  - Number fields for O, C, E, A, N (0-100).
+  - Optional "Test ID (for your reference)".
+- CTA: "Reveal Constellation" triggers `handleCalculate()`.
 
 View: Processing (`view === 'processing'`)
 
@@ -79,8 +108,10 @@ View: Results (`view === 'results'`)
     - Two cards for the remaining results with image and description.
     - Labels: "Secondary Influence" and "Tertiary Influence".
 - Actions:
-  - "Refine Traits": sets `view = 'assessment'` without preserving any history (traits remain as last set).
+  - "Refine Traits": returns to `assessment` or `manual-entry` based on last selected input method.
   - "Save Map": calls `window.print()` for browser print dialog.
+- Optional display:
+  - If Test ID was entered, it appears as "Associated Test ID" with "User-supplied reference".
 
 Modal: "The Science" (`isAboutOpen === true`)
 
@@ -101,15 +132,15 @@ Data and persistence
 Navigation summary (current)
 
 - App load -> Intro.
-- Intro -> Assessment (Begin Mapping).
-- Assessment -> Processing -> Results (Reveal Constellation).
-- Results -> Assessment (Refine Traits).
+- Intro -> Method Select (Begin Mapping).
+- Method Select -> Assessment or Manual Entry or External Test Info.
+- External Test Info -> Manual Entry or Method Select.
+- Assessment/Manual Entry -> Processing -> Results (Reveal Constellation).
+- Results -> Assessment or Manual Entry (Refine Traits).
 - Any view -> Intro (logo click).
 - Any view -> Science modal (nav button).
 
 Non-implemented paths (not present in current code)
 
-- No "Enter Existing Big Five Scores" flow (numeric inputs).
-- No "Take Full Big Five Test" flow (iframe or post-test instructions).
 - No "Load Saved Result" flow.
 - No explicit save prompt, Result ID, or local storage persistence.
