@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import Particles from './components/Particles';
 import wolfImg from '../images/Wolf.png';
 import elephantImg from '../images/Elephant.png';
 import octopusImg from '../images/Octopus.png';
@@ -155,11 +156,11 @@ const Slider = ({ trait, value, onChange, desc }: SliderProps) => (
     <div className="flex justify-between mb-4 items-end">
       <div>
         <h3 className="text-lg font-medium text-slate-200">{traitNames[trait]}</h3>
-        <p className="text-sm text-slate-500 min-h-[1.25rem] transition-colors duration-300 group-hover:text-indigo-300">
+        <p className="text-sm text-slate-300 min-h-[1.25rem] transition-colors duration-300 group-hover:text-indigo-200">
           {desc}
         </p>
       </div>
-      <span className="text-2xl serif text-indigo-200 w-12 text-right">{value}</span>
+      <span className="text-2xl serif text-indigo-100 w-12 text-right">{value}</span>
     </div>
     <input
       type="range"
@@ -228,6 +229,23 @@ export default function AnimalConstellationApp() {
   return (
     <div className="relative min-h-screen">
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="relative w-full h-full">
+            <Particles
+              particleCount={200}
+              particleSpread={10}
+              speed={0.1}
+              particleColors={['#ffd700', '#ffd700', '#ffd700']}
+              moveParticlesOnHover={false}
+              particleHoverFactor={1}
+              alphaParticles={false}
+              particleBaseSize={100}
+              sizeRandomness={1}
+              cameraDistance={20}
+              disableRotation={false}
+            />
+          </div>
+        </div>
         <div
           className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-900/30 rounded-full blur-3xl animate-pulse"
           style={{ animationDuration: '8s' }}
@@ -249,7 +267,7 @@ export default function AnimalConstellationApp() {
         </button>
         <div className="flex gap-6 items-center">
           <button
-            className="text-sm text-slate-400 hover:text-white transition-colors"
+            className="text-sm text-slate-200 hover:text-white transition-colors"
             onClick={() => setIsAboutOpen(true)}
           >
             The Science
@@ -266,7 +284,7 @@ export default function AnimalConstellationApp() {
                 Ecological Constellation
               </span>
             </h1>
-            <p className="text-lg text-slate-400 mb-12 font-light leading-relaxed">
+            <p className="text-lg text-slate-200 mb-12 font-light leading-relaxed">
               Beyond simple labels. This system translates your Big Five personality traits into a weighted constellation of
               ecological strategies. Are you a pack-oriented coordinator, a solitary specialist, or an adaptable generalist?
             </p>
@@ -285,11 +303,11 @@ export default function AnimalConstellationApp() {
             <div className="w-full flex justify-between items-end mb-12 border-b border-slate-800 pb-4">
               <div>
                 <h2 className="serif text-3xl text-white">Trait Input</h2>
-                <p className="text-slate-500 text-sm mt-1">Adjust sliders to match your tendencies.</p>
+                <p className="text-slate-300 text-sm mt-1">Adjust sliders to match your tendencies.</p>
               </div>
               <div className="text-right hidden sm:block">
-                <span className="text-xs uppercase tracking-widest text-slate-500 block mb-1">Methodology</span>
-                <span className="text-sm text-indigo-300">Big Five Model</span>
+                <span className="text-xs uppercase tracking-widest text-slate-400 block mb-1">Methodology</span>
+                <span className="text-sm text-indigo-200">Big Five Model</span>
               </div>
             </div>
             <div className="grid gap-4 md:gap-8">
@@ -327,14 +345,14 @@ export default function AnimalConstellationApp() {
                 <Icon name="hub" className="text-indigo-300 text-3xl" />
               </div>
             </div>
-            <p className="mt-8 text-slate-400 serif text-xl animate-pulse">Mapping ecological strategies...</p>
+            <p className="mt-8 text-slate-200 serif text-xl animate-pulse">Mapping ecological strategies...</p>
           </div>
         )}
 
         {view === 'results' && results.length > 0 && (
           <div className="w-full animate-slide-up pb-20">
             <div className="text-center mb-12">
-              <span className="text-indigo-300 text-sm tracking-[0.2em] uppercase mb-2 block">Your Archetype Map</span>
+              <span className="text-indigo-200 text-sm tracking-[0.2em] uppercase mb-2 block">Your Archetype Map</span>
               <h2 className="serif text-4xl text-white">Ecological Constellation</h2>
             </div>
 
@@ -346,7 +364,7 @@ export default function AnimalConstellationApp() {
                     <img
                       src={primaryResult.image}
                       alt={primaryResult.name}
-                      className="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-screen"
+                      className="result-image absolute inset-0 w-full h-full object-cover opacity-95"
                     />
                     <div className="absolute bottom-4 right-4 bg-black/50 px-3 py-1 rounded-full text-xs text-indigo-200 border border-indigo-500/30 backdrop-blur-sm">
                       Primary Anchor
@@ -354,16 +372,16 @@ export default function AnimalConstellationApp() {
                   </div>
                   <div className="p-8 md:p-12 flex flex-col justify-center">
                     <h3 className="serif text-5xl text-white mb-2">{primaryResult.name}</h3>
-                    <p className="text-indigo-200 italic text-lg mb-6 serif">{primaryResult.tagline}</p>
+                    <p className="text-indigo-100 italic text-lg mb-6 serif">{primaryResult.tagline}</p>
                     <div className="h-px w-16 bg-slate-700 mb-6" />
-                    <p className="text-slate-300 leading-relaxed mb-6">{primaryResult.desc}</p>
+                    <p className="text-slate-200 leading-relaxed mb-6">{primaryResult.desc}</p>
                     <div className="space-y-3">
-                      <h4 className="text-sm text-slate-500 uppercase tracking-widest mb-3">Key Strategic Traits</h4>
+                      <h4 className="text-sm text-slate-300 uppercase tracking-widest mb-3">Key Strategic Traits</h4>
                       <div className="flex flex-wrap gap-2">
                         {primaryResult.keywords.map((keyword) => (
                           <span
                             key={keyword}
-                            className="px-3 py-1 bg-indigo-900/40 border border-indigo-500/30 rounded text-xs text-indigo-200"
+                            className="px-3 py-1 bg-indigo-900/40 border border-indigo-500/30 rounded text-xs text-indigo-100"
                           >
                             {keyword}
                           </span>
@@ -388,13 +406,13 @@ export default function AnimalConstellationApp() {
                       className="w-16 h-16 rounded-full object-cover border border-slate-600 bg-slate-900 group-hover:border-indigo-400 transition-colors"
                     />
                     <div>
-                      <div className="text-xs text-indigo-300 uppercase tracking-wider mb-1">
+                      <div className="text-xs text-indigo-200 uppercase tracking-wider mb-1">
                         {idx === 0 ? 'Secondary Influence' : 'Tertiary Influence'}
                       </div>
                       <h3 className="serif text-2xl text-white">{animal.name}</h3>
                     </div>
                   </div>
-                  <p className="text-slate-400 text-sm leading-relaxed">{animal.desc}</p>
+                  <p className="text-slate-200 text-sm leading-relaxed">{animal.desc}</p>
                 </div>
               ))}
             </div>
@@ -402,13 +420,13 @@ export default function AnimalConstellationApp() {
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => setView('assessment')}
-                className="px-6 py-3 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full transition-all"
+                className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all"
               >
                 Refine Traits
               </button>
               <button
                 onClick={() => window.print()}
-                className="px-6 py-3 text-sm text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 rounded-full transition-all flex items-center gap-2"
+                className="px-6 py-3 text-sm text-slate-200 hover:text-white border border-slate-600 hover:border-slate-400 rounded-full transition-all flex items-center gap-2"
               >
                 <Icon name="print" /> Save Map
               </button>
@@ -421,15 +439,15 @@ export default function AnimalConstellationApp() {
         <div className="fixed inset-0 z-50 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
             <button
-              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              className="absolute top-4 right-4 text-slate-200 hover:text-white"
               onClick={() => setIsAboutOpen(false)}
             >
               <Icon name="close" />
             </button>
             <div className="p-8">
               <h2 className="serif text-3xl text-white mb-2">The Science Behind the Map</h2>
-              <p className="text-indigo-300 text-sm mb-6 uppercase tracking-wider">Ecological Strategy vs. Personality</p>
-              <div className="space-y-6 text-slate-300 leading-relaxed">
+              <p className="text-indigo-200 text-sm mb-6 uppercase tracking-wider">Ecological Strategy vs. Personality</p>
+              <div className="space-y-6 text-slate-200 leading-relaxed">
                 <p>
                   This system uses the <strong className="text-white">Big Five</strong> personality model—the gold standard in
                   modern psychology—and maps it to biological "ecological strategies."
@@ -448,7 +466,7 @@ export default function AnimalConstellationApp() {
                     ['Neuroticism', 'Threat Sensitivity & Vigilance'],
                   ].map(([title, desc]) => (
                     <div key={title} className="bg-slate-800/50 p-4 rounded-lg">
-                      <strong className="text-indigo-300 block mb-1">{title}</strong>
+                      <strong className="text-indigo-200 block mb-1">{title}</strong>
                       <span className="text-sm">{desc}</span>
                     </div>
                   ))}
