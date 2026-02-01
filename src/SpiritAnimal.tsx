@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
 import Particles from './components/Particles';
-import wolfImg from '../images/Wolf.png';
-import elephantImg from '../images/Elephant.png';
-import octopusImg from '../images/Octopus.png';
-import ravenImg from '../images/Raven.png';
-import beaverImg from '../images/beaver.png';
-import dolphinImg from '../images/Dolphin.png';
-import capybaraImg from '../images/Capybara.png';
-import owlImg from '../images/Owl.png';
-import antImg from '../images/Ant.png';
-import tigerImg from '../images/Tiger.png';
+import wolfImg from './assets/animals/Wolf.png';
+import elephantImg from './assets/animals/Elephant.png';
+import octopusImg from './assets/animals/Octopus.png';
+import ravenImg from './assets/animals/Raven.png';
+import beaverImg from './assets/animals/beaver.png';
+import dolphinImg from './assets/animals/Dolphin.png';
+import capybaraImg from './assets/animals/Capybara.png';
+import owlImg from './assets/animals/Owl.png';
+import antImg from './assets/animals/Ant.png';
+import tigerImg from './assets/animals/Tiger.png';
 
 type TraitKey = 'E' | 'A' | 'C' | 'O' | 'N';
 
