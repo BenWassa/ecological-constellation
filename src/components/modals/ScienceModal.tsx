@@ -39,9 +39,8 @@ export const ScienceModal = ({ isOpen, onClose }: ScienceModalProps) => {
               that translates those measurements into contextual strategies.
             </p>
             <p>
-              The map is{' '}
-              <span className="text-indigo-100">non-diagnostic</span> and
-              designed to support exploration, not clinical assessment.
+              The map is <span className="text-indigo-100">non-diagnostic</span>{' '}
+              and designed to support exploration, not clinical assessment.
             </p>
             <p>
               Prefer a standardized assessment? Take the full Big Five test at{' '}

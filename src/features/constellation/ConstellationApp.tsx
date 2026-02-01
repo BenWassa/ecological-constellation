@@ -1,10 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { animals } from '../../data/animals';
-import {
-  manualEntryTraitOrder,
-  sliderTraitOrder,
-} from '../../data/traits';
+import { manualEntryTraitOrder, sliderTraitOrder } from '../../data/traits';
 import { calculateResults, type ScoredAnimal } from '../../lib/scoring';
 import { clampTraitValue, getTraitDescription } from '../../lib/traits';
 import type { TraitKey, TraitValues } from '../../types/traits';
@@ -60,7 +57,8 @@ export default function ConstellationApp() {
     if (direction === 'forward') {
       nextIndex = (currentIndex + 1) % sliderTraitOrder.length;
     } else {
-      nextIndex = (currentIndex - 1 + sliderTraitOrder.length) % sliderTraitOrder.length;
+      nextIndex =
+        (currentIndex - 1 + sliderTraitOrder.length) % sliderTraitOrder.length;
     }
 
     const nextTrait = sliderTraitOrder[nextIndex];
@@ -332,7 +330,10 @@ export default function ConstellationApp() {
         )}
       </main>
 
-      <ScienceModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      <ScienceModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+      />
     </div>
   );
 }
