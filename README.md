@@ -33,24 +33,15 @@ Outputs are interpretive and contextual. They describe tendencies, not destiny.
 
 ### 1. Trait Input
 
-Users input Big Five traits on a 0–100 scale using sliders.
+Users input Big Five traits on a 0–120 scale using sliders.
 
-These values are displayed numerically for clarity but are internally converted into conceptual bands:
-
-| Range  | Band      |
-| ------ | --------- |
-| 0–35   | Low       |
-| 36–65  | Moderate  |
-| 66–85  | High      |
-| 86–100 | Very High |
-
-Banding avoids false precision and keeps results psychologically interpretable.
+Values are displayed numerically for clarity and treated as continuous inputs.
 
 ---
 
 ### 2. Animal Profiles
 
-Each animal is defined as an ecological strategy with trait bands, strengths, and limitations.
+Each animal is defined as an ecological strategy with trait targets, strengths, and limitations.
 
 Animals are stored in an extensible data structure and can be added or modified without changing core logic.
 
@@ -58,11 +49,11 @@ Example trait profile:
 
 ```ts
 traits: {
-  O: "very_high",
-  C: "moderate",
-  E: "low",
-  A: "low",
-  N: "high"
+  O: 108,
+  C: 84,
+  E: 50,
+  A: 50,
+  N: 72
 }
 ```
 
@@ -70,22 +61,9 @@ traits: {
 
 ### 3. Matching Algorithm
 
-Trait matching is band-based and weighted.
+Trait matching uses Euclidean distance between the user trait vector and each animal trait vector.
 
-Scoring rules:
-
-- Exact band match: +3
-- Adjacent band match: +1
-- Distant mismatch: −2
-
-Trait weights:
-
-- Openness: ×1.2
-- Conscientiousness: ×1.2
-- Neuroticism: ×0.8
-- Extraversion and Agreeableness: ×1.0
-
-Animals are ranked by total weighted score.
+Animals are ranked by closest distance (lower is a better match).
 
 Only the Top 3 matches are returned.
 
@@ -121,7 +99,6 @@ The system is designed to feel reflective, grounded, and intellectually honest.
 
 - React (functional components)
 - Tailwind CSS
-- Lucide icons
 - No backend required for MVP
 
 Core logic is isolated and easily testable.
@@ -133,9 +110,9 @@ Core logic is isolated and easily testable.
 You can:
 
 - Add new animals by extending the animal data array
-- Adjust trait weights centrally
-- Modify band thresholds
-- Enhance or swap visual representations
+  - Adjust trait targets centrally
+  - Modify description thresholds
+  - Enhance or swap visual representations
 
 The architecture is designed for iteration and tuning.
 

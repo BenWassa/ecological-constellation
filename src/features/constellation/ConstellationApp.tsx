@@ -243,7 +243,7 @@ export default function ConstellationApp() {
                   Manual Score Entry
                 </h2>
                 <p className="text-slate-300 text-sm mt-1">
-                  Enter your Big Five scores (0–100).
+                  Enter your Big Five scores (0–120).
                 </p>
               </div>
               <div className="text-right hidden sm:block">
@@ -264,14 +264,14 @@ export default function ConstellationApp() {
                   <div>
                     <h3 className="text-lg text-white">{label}</h3>
                     <p className="text-xs text-slate-400">
-                      0 (low) to 100 (high)
+                      0 (low) to 120 (high)
                     </p>
                   </div>
                   <input
                     type="number"
                     inputMode="numeric"
                     min="0"
-                    max="100"
+                    max="120"
                     step="1"
                     value={traits[trait]}
                     onChange={(e) =>

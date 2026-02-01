@@ -76,12 +76,12 @@ Task 3: Manual Big Five Score Entry
 New view: manual-entry
 
 Inputs
-	•	Five numeric fields or sliders (0–100)
+	•	Five numeric fields or sliders (0–120)
 	•	Labels: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism
 	•	Optional field: “Test ID (for your reference)”
 
 Behavior
-	•	Validation: numbers only, 0–100
+	•	Validation: numbers only, 0–120
 	•	On submit → existing processing + results pipeline
 
 Acceptance
